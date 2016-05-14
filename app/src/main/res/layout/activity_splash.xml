@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context="es.uoproject.pliskid.Splash">
+    tools:context=".activities.Splash">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -16,8 +16,16 @@
         android:keepScreenOn="true"
         android:text="@string/dummy_content"
         android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:enabled="true"/>
+
+    <ImageView
+        android:layout_width="151dp"
+        android:layout_height="195dp"
+        android:layout_gravity="center_horizontal"
+android:layout_marginTop="40dp"
+        android:background="@mipmap/avatar"/>
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
@@ -42,7 +50,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/dummy_button" />
+                android:text="@string/dummy_button"
+                android:textColor="#33b5e5"/>
 
         </LinearLayout>
     </FrameLayout>

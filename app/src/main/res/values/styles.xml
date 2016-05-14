@@ -20,4 +20,14 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/azul_componente</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/azul_componente</item>
+        <item name="colorControlNormal">@color/azul_componente</item>
+        <item name="colorControlActivated">@color/azul_componente</item>
+    </style>
+
 </resources>
