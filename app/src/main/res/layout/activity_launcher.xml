@@ -25,10 +25,10 @@
             android:background="@color/black_transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:columnWidth="90dp"
+            android:columnWidth="75dp"
             android:numColumns="auto_fit"
-            android:verticalSpacing="50dp"
-            android:horizontalSpacing="50dp"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
             android:stretchMode="columnWidth"
             android:gravity="center"
             >

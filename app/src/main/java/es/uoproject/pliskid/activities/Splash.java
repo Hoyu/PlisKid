@@ -10,12 +10,14 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import es.uoproject.pliskid.R;
+import es.uoproject.pliskid.util.Preferencias;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class Splash extends AppCompatActivity {
+    Preferencias preferencias;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -100,7 +102,11 @@ public class Splash extends AppCompatActivity {
 
 
         //Comprobaciones widget
-
+        preferencias=new Preferencias(this);
+        if(preferencias.getUserPass()!=null){
+            Intent intent = new Intent(Splash.this, Launcher.class);
+            startActivity(intent);
+        }
 
         setContentView(R.layout.activity_splash);
 

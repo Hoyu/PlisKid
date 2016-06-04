@@ -169,8 +169,8 @@ public class Pack implements Serializable{
     public void addToHome(final Context context, final RelativeLayout home){
         RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //the coordinates are float
-        layoutParams.leftMargin=x;
-        layoutParams.topMargin=y;
+        layoutParams.leftMargin=x +25;
+        layoutParams.topMargin=y +75;
 
         LayoutInflater inflater = (LayoutInflater)context.getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
@@ -185,40 +185,43 @@ public class Pack implements Serializable{
         ((TextView)linearLayout.findViewById(R.id.icon_text)).setText(label);
 
         //Add the OnTouch event for Drag and Drop
-        linearLayout.setOnTouchListener(new MyOnTouchListener());
+        //linearLayout.setOnTouchListener(new MyOnTouchListener());
         //In order to avoid apps for launching when drag and drop using longclick
-       /* linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                /*
+
+                new MyOnTouchListener();
                 //ImageView Setup
                 ImageView imageView = new ImageView(context);
                 //setting image resource
-                imageView.setBackgroundColor(context.getResources().getColor(R.color.error_color));
+                imageView.setBackgroundColor(context.getResources().getColor(R.color.azul_componente));
                 //setting image position
                 imageView.setLayoutParams(new RelativeLayout.LayoutParams(
                         (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,context.getResources().getDisplayMetrics()),
                         RelativeLayout.LayoutParams.MATCH_PARENT));
                 //adding view to layout
                 home.addView(imageView);
-                */
 
-                /*linearLayout.setOnDragListener(new View.OnDragListener() {
+
+                linearLayout.setOnDragListener(new View.OnDragListener() {
                     @Override
                     public boolean onDrag(View v, DragEvent event) {
                         switch (event.getAction()){
                             case DragEvent.ACTION_DROP:
-                                if((v.getX() >= home.getX()+30) && (v.getY() >= home.getY() +30) )
+                                if((v.getX() >= home.getX()+30) && (v.getY() >= home.getY() +30) ) {
                                     linearLayout.removeView(v);
+                                    home.removeViewAt(INDEX_CHILD);
+                                }
                                 break;
                         }
                        return true;
                     }
-                });*//*
+                });
                 //home.removeView(imageView);
-                return false;
+                return true;
             }
-        });*/
+        });
         linearLayout.setOnClickListener(new AppClickListener(context));
 
         linearLayout.setTag(this);

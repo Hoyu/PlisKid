@@ -46,6 +46,6 @@ public class MyOnTouchListener implements View.OnTouchListener {
                 break;
         }
         //to continue handling the event after this event
-        return false;
+        return true;
     }
 }
