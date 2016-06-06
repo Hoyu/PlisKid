@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.DimenRes;
@@ -51,6 +52,7 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
@@ -71,7 +73,10 @@ import es.uoproject.pliskid.modelo.Pack;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Launcher extends Activity implements View.OnTouchListener, View.OnDragListener {
@@ -158,10 +163,6 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
                 AlertDialog alert = builder.create();
                 alert.show();
 
-                DragShadow dragShadow = new DragShadow(v);
-                ClipData clip = ClipData.newPlainText("", "");
-                v.startDrag(clip, dragShadow, v, 0);
-
                 return true;
             }
         });
@@ -173,7 +174,8 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
         //Get the applications info in our array
 
         //setPacks();
-        new LoadApps().execute();
+        if(preferencias.getUserPass()!=null)
+            new LoadApps().execute();
 
         //GetApps From previous session
         appsLoad();
@@ -322,7 +324,7 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
         Intent.ShortcutIconResource iconResource = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
         Bitmap icon = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
         String shortcutLabel = intent.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
-        Intent shortIntent = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
+        final Intent shortIntent = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 
         if (icon == null) {
             if (iconResource != null) {
@@ -345,12 +347,12 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
 
 
         if (shortcutLabel != null && shortIntent != null && icon != null) {
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.leftMargin = 100;
             lp.topMargin = (int) 100;
 
             LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LinearLayout ll = (LinearLayout) li.inflate(R.layout.drawer_item, null);
+            final LinearLayout ll = (LinearLayout) li.inflate(R.layout.drawer_item, null);
 
             ((ImageView) ll.findViewById(R.id.icon_image)).setImageBitmap(icon);
             ((TextView) ll.findViewById(R.id.icon_text)).setText(shortcutLabel);
@@ -358,12 +360,62 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
             ll.setOnLongClickListener(new View.OnLongClickListener() {
 
                 @Override
-                public boolean onLongClick(View v) {
-                    v.setOnTouchListener(new MyOnTouchListener());
-                    return false;
-                }
-            });
+                public boolean onLongClick(final View v) {
+                    ll.setOnTouchListener(new MyOnTouchListener());
 
+                    final Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (v.isPressed()) {
+                                Activity activity = (Activity) Launcher.this;
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        home.removeView(v);
+
+                                    }
+                                });
+                            } else {
+
+                                this.cancel();
+                            }
+                        }
+                    }, 5000, 6000);
+
+
+                    final ProgressBar bar = new ProgressBar(Launcher.this,
+                            null,
+                            android.R.attr.progressBarStyleHorizontal);
+                    home.addView(bar, lp);
+
+                    final CountDownTimer cdt = new CountDownTimer(5000, 200) {
+
+                        public void onTick(long millisUntilFinished) {
+
+                            if (v.isPressed()) {
+                                int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
+                                bar.setProgress(current);
+                            } else {
+                                onFinish();
+                                this.cancel();
+                            }
+                        }
+
+                        public void onFinish() {
+                            home.removeView(bar);
+                        }
+                    }.start();
+
+
+                    if (!v.isPressed()) {
+                        timer.cancel();
+                        cdt.onFinish();
+                    }
+                    return true;
+                }
+
+            });
             ll.setOnClickListener(new ShortcutClickListener(this));
             ll.setTag(shortIntent);
             home.addView(ll, lp);
@@ -382,6 +434,7 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
     protected void onStop() {
         super.onStop();
         mAppWidgetHost.stopListening();
+        
     }
 
     private void configureWidget(Intent data) {
@@ -402,18 +455,69 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
         Bundle extras = data.getExtras();
         int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-        LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
+        final LauncherAppWidgetHostView hostView = (LauncherAppWidgetHostView) mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
         hostView.setAppWidget(appWidgetId, appWidgetInfo);
 
         hostView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                v.setOnTouchListener(new MyOnTouchListener());
+
+                hostView.setOnTouchListener(new MyOnTouchListener());
+
+                final Timer timerWidget = new Timer();
+                timerWidget.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (hostView.isPressed()) {
+                            Activity activity = (Activity) Launcher.this;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    home.removeView(hostView);
+                                }
+                            });
+                        } else {
+
+                            this.cancel();
+                        }
+                    }
+                }, 5000, 6000);
+
+
+                final ProgressBar barWidget = new ProgressBar(Launcher.this,
+                        null,
+                        android.R.attr.progressBarStyleHorizontal);
+                home.addView(barWidget);
+
+                final CountDownTimer cdtWidget = new CountDownTimer(5000, 200) {
+
+                    public void onTick(long millisUntilFinished) {
+
+                        if (hostView.isPressed()) {
+                            int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
+                            barWidget.setProgress(current);
+                        } else {
+                            onFinish();
+                            this.cancel();
+                        }
+                    }
+
+                    public void onFinish() {
+                        home.removeView(barWidget);
+                    }
+                }.start();
+
+
+                if (!hostView.isPressed()) {
+                    timerWidget.cancel();
+                    cdtWidget.onFinish();
+                }
                 return true;
             }
-        });
-        home.addView(hostView);
 
+        });
+
+        home.addView(hostView);
         drawer.bringToFront();
     }
 

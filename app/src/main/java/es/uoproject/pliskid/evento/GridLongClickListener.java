@@ -84,6 +84,8 @@ public class GridLongClickListener implements AdapterView.OnItemLongClickListene
             serialize=new SerializableData();
         if (serialize.packs==null)
             serialize.packs=new ArrayList<Pack>();
+        if(serialize.packs.contains(serializePack))
+            serialize.packs.remove(serializePack);
         serialize.packs.add(serializePack);
         Serialization.serializeData(serialize);
 

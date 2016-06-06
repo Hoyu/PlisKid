@@ -1,5 +1,6 @@
 package es.uoproject.pliskid.modelo;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,16 +9,20 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,12 +30,18 @@ import es.uoproject.pliskid.activities.Launcher;
 import es.uoproject.pliskid.R;
 import es.uoproject.pliskid.evento.AppClickListener;
 import es.uoproject.pliskid.evento.MyOnTouchListener;
+import es.uoproject.pliskid.util.SerializableData;
+import es.uoproject.pliskid.util.Serialization;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by darkm_000 on 14/05/2015.
@@ -38,11 +49,13 @@ import java.io.Serializable;
 public class Pack implements Serializable{
 
     private static final int INDEX_CHILD = 0;
+    private static final long REP_DELAY = 1;
     //To serialize we can't use the Drawable. We create coordinates x, y and a String with the icon path directory
     transient Drawable icon;
     String name;
     String packageName;
     String label;
+
 
     public Drawable getIcon() {
         return icon;
@@ -167,7 +180,7 @@ public class Pack implements Serializable{
 
 
     public void addToHome(final Context context, final RelativeLayout home){
-        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //the coordinates are float
         layoutParams.leftMargin=x +25;
         layoutParams.topMargin=y +75;
@@ -184,41 +197,93 @@ public class Pack implements Serializable{
         ((ImageView)linearLayout.findViewById(R.id.icon_image)).setImageDrawable(icon);
         ((TextView)linearLayout.findViewById(R.id.icon_text)).setText(label);
 
-        //Add the OnTouch event for Drag and Drop
-        //linearLayout.setOnTouchListener(new MyOnTouchListener());
         //In order to avoid apps for launching when drag and drop using longclick
         linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-
-                new MyOnTouchListener();
-                //ImageView Setup
-                ImageView imageView = new ImageView(context);
-                //setting image resource
-                imageView.setBackgroundColor(context.getResources().getColor(R.color.azul_componente));
-                //setting image position
-                imageView.setLayoutParams(new RelativeLayout.LayoutParams(
-                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,context.getResources().getDisplayMetrics()),
-                        RelativeLayout.LayoutParams.MATCH_PARENT));
-                //adding view to layout
-                home.addView(imageView);
+            public boolean onLongClick(final View v) {
 
 
-                linearLayout.setOnDragListener(new View.OnDragListener() {
+                linearLayout.setOnTouchListener(new MyOnTouchListener());
+
+                final Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
                     @Override
-                    public boolean onDrag(View v, DragEvent event) {
-                        switch (event.getAction()){
-                            case DragEvent.ACTION_DROP:
-                                if((v.getX() >= home.getX()+30) && (v.getY() >= home.getY() +30) ) {
-                                    linearLayout.removeView(v);
-                                    home.removeViewAt(INDEX_CHILD);
+                    public void run() {
+                        if(v.isPressed()) {
+                            Activity activity=(Activity)context;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    SerializableData serialize= Serialization.loadSerializableData();
+                                    if (serialize==null)
+                                        serialize=new SerializableData();
+                                    if (serialize.packs==null)
+                                        serialize.packs=new ArrayList<Pack>();
+                                    for (Iterator<Pack> iterator = serialize.packs.iterator(); iterator.hasNext(); ) {
+                                        Pack p = iterator.next();
+                                        if(p.getPackageName().equals(Pack.this.getPackageName()))
+                                            iterator.remove();
+                                    }
+                                    Serialization.serializeData(serialize);
+                                    home.removeView(v);
+
                                 }
-                                break;
+                            });
                         }
-                       return true;
+                        else {
+                            //SERIALIZE
+                            SerializableData serialize= Serialization.loadSerializableData();
+                            if (serialize==null)
+                                serialize=new SerializableData();
+                            if (serialize.packs==null)
+                                serialize.packs=new ArrayList<Pack>();
+
+                            for (Iterator<Pack> iterator = serialize.packs.iterator(); iterator.hasNext(); ) {
+                                Pack p = iterator.next();
+                                if(p.getPackageName().equals(Pack.this.getPackageName()))
+                                    iterator.remove();
+                            }
+                            Pack.this.setX((int) v.getX());
+                            Pack.this.setY((int) v.getY());
+                            serialize.packs.add(Pack.this);
+                            Serialization.serializeData(serialize);
+                            this.cancel();
+                        }
                     }
-                });
-                //home.removeView(imageView);
+                },5000,6000);
+
+
+
+                final ProgressBar bar= new ProgressBar(context,
+                        null,
+                        android.R.attr.progressBarStyleHorizontal);
+                home.addView(bar, layoutParams);
+
+                final CountDownTimer cdt = new CountDownTimer(5000, 200) {
+
+                    public void onTick(long millisUntilFinished) {
+
+                        if(v.isPressed()) {
+                            int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
+                            bar.setProgress(current);
+                        }else {
+                            onFinish();
+                            this.cancel();
+                        }
+                    }
+
+                    public void onFinish() {
+                        home.removeView(bar);
+                    }
+                }.start();
+
+
+
+                if(!v.isPressed()) {
+                    timer.cancel();
+                    cdt.onFinish();
+                }
                 return true;
             }
         });
@@ -229,5 +294,6 @@ public class Pack implements Serializable{
         home.addView(linearLayout, INDEX_CHILD, layoutParams);
 
     }
+
 
 }
