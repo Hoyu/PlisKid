@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
@@ -79,7 +80,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Launcher extends Activity implements View.OnTouchListener, View.OnDragListener {
+public class Launcher extends Activity {
 
 
     private static final int REQUEST_PASSWORD = 1;
@@ -99,12 +100,6 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
 
     Preferencias preferencias;
 
-    View.OnTouchListener mInterceptTouchListener;
-
-    public void setOnInterceptTouchListener(View.OnTouchListener listener) {
-        mInterceptTouchListener = listener;
-    }
-
     //With the packageManager we'll get the info of the system to our array of apps
     Pack[] packs;
     PackageManager packageManager;
@@ -114,6 +109,7 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
     LauncherAppWidgetHost mAppWidgetHost;
     //To get access to our activity info (SAVING CHANGES IN ACTIVITY)
     static Activity activity;
+    boolean version=false;
 
     public static Activity getActivity() {
         return activity;
@@ -122,6 +118,7 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         launchAppChooser();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -184,6 +181,11 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
         botonCambiarFondo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                cambiarVersion();
+
+
+                /*
                 //Titulo del chooser
                 String title = getResources().getString(R.string.chooser_title);
                 //Chooser
@@ -209,7 +211,10 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
 
                 //Lanzamos el chooser con su requestCode
                 startActivityForResult(chooserIntent, CHANGE_PICTURE);
+                */
+
             }
+
         });
 
         //Pregunta para poner como default
@@ -221,6 +226,35 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
         //We create the id.xml in values for creating a resource item of type id
         widgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);*/
     }
+
+    @Override
+    public void onNewIntent(Intent newIntent) {
+
+        version = newIntent.getBooleanExtra("Version", false);
+        if(version)
+            cambiarVersion();
+        else{
+            version=false;
+            botonCambiarFondo.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void cambiarVersion() {
+
+        grid.setVisibility(View.INVISIBLE);
+        drawer.setVisibility(View.INVISIBLE);
+        botonCambiarFondo.setVisibility(View.INVISIBLE);
+        home.setOnLongClickListener(null);
+
+        for ( int i=0;i<home.getChildCount();i++) {
+            View v = home.getChildAt(i);
+            v.setOnLongClickListener(null);
+        }
+
+        version=false;
+
+    }
+
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -521,27 +555,6 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
         drawer.bringToFront();
     }
 
-   /* @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        // First we clear the tag to ensure that on every touch down we start with a fresh slate,
-        // even in the case where we return early. Not clearing here was causing bugs whereby on
-        // long-press we'd end up picking up an item from a previous drag operation.
-        final int action = ev.getAction();
-
-        if (action == MotionEvent.ACTION_DOWN) {
-            //clearTagCellInfo();
-        }
-
-        /*if (mInterceptTouchListener != null && mInterceptTouchListener.onTouch(this, ev)) {
-            return true;
-        }*/
-/*
-        if (action == MotionEvent.ACTION_DOWN) {
-            //setTagToCellInfoForPoint((int) ev.getX(), (int) ev.getY());
-        }
-        return false;
-    }*/
-
     private void launchAppChooser() {
         //Log.d(TAG, "launchAppChooser()");
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -589,41 +602,6 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
 
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        return true;
-    }
-
-    private class DragShadow extends View.DragShadowBuilder{
-
-        public DragShadow(View view) {
-            super(view);
-        }
-
-        @Override
-        public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint) {
-            super.onProvideShadowMetrics(shadowSize, shadowTouchPoint);
-        }
-
-        @Override
-        public void onDrawShadow(Canvas canvas) {
-            getView().draw(canvas);
-        }
-    }
-
-
-    @Override
-    public boolean onDrag(View v, DragEvent event) {
-        switch (event.getAction()){
-            case DragEvent.ACTION_DROP:
-                View draggedElement= (View) event.getLocalState();
-                home.removeView(draggedElement);
-                break;
-        }
-        return true;
-    }
-
     public class AppListener extends BroadcastReceiver {
 
         @Override
@@ -636,7 +614,7 @@ public class Launcher extends Activity implements View.OnTouchListener, View.OnD
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
         //DialogFragment.instantiate(this, "Salir");
     }
 
