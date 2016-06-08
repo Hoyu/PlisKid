@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="50dp"
+    tools:context="es.uoproject.pliskid.fragment.Fragment_NavigationDrawer">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/azul_componente" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/drawer_name"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_width="175dp"
+                android:singleLine="true"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:text="Usuario"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                />
+            <TextView
+                android:id="@+id/drawer_city"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="Madrid"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    <View style="@style/Divider" />
+
+    <android.support.v7.widget.RecyclerView
+        android:paddingTop="10dp"
+        android:id="@+id/drawer_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul_componente">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

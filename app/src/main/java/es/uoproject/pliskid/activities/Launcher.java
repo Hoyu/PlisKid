@@ -34,9 +34,12 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.DimenRes;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.Gravity;
@@ -64,6 +67,7 @@ import es.uoproject.pliskid.evento.GridClickListener;
 import es.uoproject.pliskid.evento.GridLongClickListener;
 import es.uoproject.pliskid.evento.MyOnTouchListener;
 import es.uoproject.pliskid.evento.ShortcutClickListener;
+import es.uoproject.pliskid.fragment.Fragment_NavigationDrawer;
 import es.uoproject.pliskid.util.LauncherAppWidgetHost;
 import es.uoproject.pliskid.util.LauncherAppWidgetHostView;
 import es.uoproject.pliskid.util.Preferencias;
@@ -73,6 +77,7 @@ import es.uoproject.pliskid.adapters.DrawerAdapter;
 import es.uoproject.pliskid.modelo.Pack;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -80,7 +85,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class Launcher extends Activity {
+public class Launcher extends AppCompatActivity {
 
 
     private static final int REQUEST_PASSWORD = 1;
@@ -110,6 +115,9 @@ public class Launcher extends Activity {
     //To get access to our activity info (SAVING CHANGES IN ACTIVITY)
     static Activity activity;
     boolean version=false;
+
+    private Fragment_NavigationDrawer fragment_drawer;
+    private DrawerLayout drawerLayout;
 
     public static Activity getActivity() {
         return activity;
@@ -177,13 +185,20 @@ public class Launcher extends Activity {
         //GetApps From previous session
         appsLoad();
 
+
+        drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawerlayout);
+        fragment_drawer = (Fragment_NavigationDrawer)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
+        fragment_drawer.setUp((DrawerLayout) findViewById(R.id.drawerlayout), null);
+
         botonCambiarFondo = (Button) findViewById(R.id.botonCambiarFondo);
         botonCambiarFondo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                cambiarVersion();
+                //cambiarVersion();
 
+                drawerLayout.openDrawer(Gravity.LEFT);
 
                 /*
                 //Titulo del chooser
@@ -217,6 +232,8 @@ public class Launcher extends Activity {
 
         });
 
+
+
         //Pregunta para poner como default
         //launchAppChooser();
 
@@ -245,6 +262,7 @@ public class Launcher extends Activity {
         drawer.setVisibility(View.INVISIBLE);
         botonCambiarFondo.setVisibility(View.INVISIBLE);
         home.setOnLongClickListener(null);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         for ( int i=0;i<home.getChildCount();i++) {
             View v = home.getChildAt(i);
@@ -655,6 +673,25 @@ public class Launcher extends Activity {
                 drawerAdapter.setPacks(packs);
                 drawerAdapter.notifyDataSetInvalidated();
             }
+        }
+    }
+
+
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        try
+        {
+            if(!hasFocus)
+            {
+                Object service  = getSystemService("statusbar");
+                Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
+                Method collapse = statusbarManager.getMethod("collapsePanels");
+                collapse .setAccessible(true);
+                collapse .invoke(service);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
 

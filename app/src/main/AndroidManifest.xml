@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.uoproject.pliskid">
 
+
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.PROCESS_INCOMING_CALLS" />
     <!--
      Activity launcher:
      Make it not to reset in changes -> android:configChanges
@@ -71,6 +78,12 @@
                 android:resource="@xml/widget_plis_info" />
         </receiver>
 
+        <receiver android:name=".util.IncomingCallReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
     </application>
+
 
 </manifest>

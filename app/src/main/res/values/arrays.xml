@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="send_array">
         <item>Widgets</item>
         <item>Shortcuts</item>
     </string-array>
+
+    <string-array name="options">
+        <item>Mis entradas</item>
+        <item>Ciudades</item>
+        <item>Intereses</item>
+        <item>Tu cuenta</item>
+        <item>Ayuda</item>
+        <item>Contacto</item>
+        <item>Salir</item>
+    </string-array>
+
 </resources>
