@@ -87,7 +87,7 @@ import java.util.TimerTask;
 
 public class Launcher extends AppCompatActivity {
 
-
+    private static final int REQUEST_PICK_APPWIDGET=20;
     private static final int REQUEST_PASSWORD = 1;
     private static final int REQUEST_PICK_SHORTCUT = 2;
     private static final int REQUEST_CREATE_SHORTCUT = 3;
@@ -116,6 +116,8 @@ public class Launcher extends AppCompatActivity {
     static Activity activity;
     boolean version=false;
 
+    private ProgressBar bar;
+
     private Fragment_NavigationDrawer fragment_drawer;
     private DrawerLayout drawerLayout;
 
@@ -134,6 +136,10 @@ public class Launcher extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
 
         preferencias=new Preferencias(this);
+
+        bar= new ProgressBar(Launcher.this,
+                null,
+                android.R.attr.progressBarStyleHorizontal);
 
         mAppWidgetManager = AppWidgetManager.getInstance(this);
         mAppWidgetHost = new LauncherAppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
@@ -258,19 +264,34 @@ public class Launcher extends AppCompatActivity {
 
     private void cambiarVersion() {
 
-        grid.setVisibility(View.INVISIBLE);
-        drawer.setVisibility(View.INVISIBLE);
-        botonCambiarFondo.setVisibility(View.INVISIBLE);
-        home.setOnLongClickListener(null);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        if(version) {
 
-        for ( int i=0;i<home.getChildCount();i++) {
-            View v = home.getChildAt(i);
-            v.setOnLongClickListener(null);
+            grid.setVisibility(View.INVISIBLE);
+            drawer.setVisibility(View.INVISIBLE);
+            botonCambiarFondo.setVisibility(View.INVISIBLE);
+            home.setOnLongClickListener(null);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+            for (int i = 0; i < home.getChildCount(); i++) {
+                View v = home.getChildAt(i);
+                v.setOnLongClickListener(null);
+            }
+
+            version = false;
+        }else{
+            grid.setVisibility(View.VISIBLE);
+            drawer.setVisibility(View.VISIBLE);
+            botonCambiarFondo.setVisibility(View.VISIBLE);
+            home.setOnLongClickListener(null);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+            for (int i = 0; i < home.getChildCount(); i++) {
+                View v = home.getChildAt(i);
+                v.setOnLongClickListener(null);
+            }
+
+            version = false;
         }
-
-        version=false;
-
     }
 
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
@@ -297,7 +318,7 @@ public class Launcher extends AppCompatActivity {
         Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
         pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         addEmptyData(pickIntent);
-        startActivityForResult(pickIntent, R.id.REQUEST_PICK_APPWIDGET);
+        startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
     }
 
     void addEmptyData(Intent pickIntent) {
@@ -310,7 +331,7 @@ public class Launcher extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == R.id.REQUEST_PICK_APPWIDGET) {
+            if (requestCode == REQUEST_PICK_APPWIDGET) {
                 configureWidget(data);
             } else if (requestCode == R.id.REQUEST_CREATE_APPWIDGET) {
                 createWidget(data);
@@ -435,11 +456,7 @@ public class Launcher extends AppCompatActivity {
                         }
                     }, 5000, 6000);
 
-
-                    final ProgressBar bar = new ProgressBar(Launcher.this,
-                            null,
-                            android.R.attr.progressBarStyleHorizontal);
-                    home.addView(bar, lp);
+                    home.addView(bar);
 
                     final CountDownTimer cdt = new CountDownTimer(5000, 200) {
 
@@ -535,11 +552,7 @@ public class Launcher extends AppCompatActivity {
                     }
                 }, 5000, 6000);
 
-
-                final ProgressBar barWidget = new ProgressBar(Launcher.this,
-                        null,
-                        android.R.attr.progressBarStyleHorizontal);
-                home.addView(barWidget);
+                home.addView(bar);
 
                 final CountDownTimer cdtWidget = new CountDownTimer(5000, 200) {
 
@@ -547,7 +560,7 @@ public class Launcher extends AppCompatActivity {
 
                         if (hostView.isPressed()) {
                             int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
-                            barWidget.setProgress(current);
+                            bar.setProgress(current);
                         } else {
                             onFinish();
                             this.cancel();
@@ -555,7 +568,7 @@ public class Launcher extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        home.removeView(barWidget);
+                        home.removeView(bar);
                     }
                 }.start();
 
