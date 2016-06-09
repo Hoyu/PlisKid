@@ -43,6 +43,7 @@ public class MyOnTouchListener implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                  v.setOnTouchListener(null);
+                v.setPressed(true);
                 break;
         }
         //to continue handling the event after this event

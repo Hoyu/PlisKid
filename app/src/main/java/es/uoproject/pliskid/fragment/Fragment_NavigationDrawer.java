@@ -1,5 +1,6 @@
 package es.uoproject.pliskid.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.uoproject.pliskid.R;
+import es.uoproject.pliskid.activities.Launcher;
 import es.uoproject.pliskid.adapters.NavigationAdapter;
 
 /**
@@ -36,24 +38,23 @@ import es.uoproject.pliskid.adapters.NavigationAdapter;
  */
 public class Fragment_NavigationDrawer extends Fragment implements NavigationAdapter.ClickListener {
 
-    private static final int SELECCIONAR_CIUDAD = 1;
-    private static final int SELECCIONAR_INTERESES = 2;
-    private static final int SALIR = 6;
-    private static final int MIS_ENTRADAS= 0;
+    private static final int CAMBIAR_VERSION= 0;
+    private static final int CAMBIAR_FONDO= 1;
+    private static final int QUITAR_BARRA_SISTEMA= 2;
+    private static final int BLOQUEAR_LLAMADAS= 3;
+    private static final int CAMBIAR_PASS= 4;
+    private static final int RESETEAR_ENTORNO= 5;
+    private static final int AYUDA=6;
+    private static final int SALIR=7;
 
     private static final int CHANGE_PICTURE=10;
 
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout mDrawerLayout;
 
-    private ImageView drawer_image;
-    private TextView drawer_name;
-    private TextView drawer_city;
     private RecyclerView drawer_recycler;
     private NavigationAdapter drawerAdapter;
 
-
-    private boolean isCityChanged= false;
 
     public Fragment_NavigationDrawer() {
     }
@@ -65,8 +66,6 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
 
         View layout=inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        drawer_name=(TextView) layout.findViewById(R.id.drawer_name);
-        drawer_city=(TextView) layout.findViewById(R.id.drawer_city);
         drawer_recycler=(RecyclerView) layout.findViewById(R.id.drawer_recycler);
 
 
@@ -99,9 +98,6 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
 
                 drawerAdapter.notifyDataSetChanged();
 
-
-
-
             }
 
             @Override
@@ -111,18 +107,15 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
         };
         mDrawerLayout.setDrawerListener(drawerToggle);
 
-
     }
-
-
 
     @Override
     public void itemClicked(View view, int position) {
 
         Intent intentResult=null;
-
+        Launcher activity= (Launcher)getActivity();
         switch(position){
-            case MIS_ENTRADAS:
+            case CAMBIAR_FONDO:
 
                 //Titulo del chooser
                 String title = getResources().getString(R.string.chooser_title);
@@ -148,23 +141,19 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
                 }
 
                 //Lanzamos el chooser con su requestCode
-                startActivityForResult(chooserIntent, CHANGE_PICTURE);
+                getActivity().startActivityForResult(chooserIntent, CHANGE_PICTURE);
 
 
                 break;
-            case SELECCIONAR_INTERESES:
 
+            case CAMBIAR_VERSION:
+                activity.cambiarVersion();
                 break;
-            case SELECCIONAR_CIUDAD:
 
-                break;
             case SALIR:
 
+                activity.launchAppChooser();
                 break;
         }
-    }
-
-    public void setImagenUsuario(Bitmap data) {
-        drawer_image.setImageBitmap(data);
     }
 }

@@ -21,28 +21,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true">
 
-            <TextView
-                android:id="@+id/drawer_name"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                android:layout_width="175dp"
-                android:singleLine="true"
-                android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:text="Usuario"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                />
-            <TextView
-                android:id="@+id/drawer_city"
-                android:layout_gravity="center_horizontal"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:text="Madrid"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                />
+                android:src="@mipmap/avatar"/>
 
 
         </LinearLayout>
