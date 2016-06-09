@@ -292,7 +292,7 @@ public class Pack implements Serializable{
         linearLayout.setTag(this);
         //We put it into our home view in the same coordinates with the layourParams
         home.addView(linearLayout, INDEX_CHILD, layoutParams);
-
+        home.bringChildToFront(linearLayout);
     }
 
 }

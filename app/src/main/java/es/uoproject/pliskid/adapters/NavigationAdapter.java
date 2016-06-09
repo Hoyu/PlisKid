@@ -19,13 +19,14 @@ import es.uoproject.pliskid.R;
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.MyViewHolder> {
 
 
-    private static final int MIS_ENTRADAS= 0;
-    private static final int CIUDADES= 1;
-    private static final int INTERESES= 2;
-    private static final int TU_CUENTA= 3;
-    private static final int AYUDA= 4;
-    private static final int CONTACTO= 5;
-    private static final int SALIR= 6;
+    private static final int CAMBIAR_VERSION= 0;
+    private static final int CAMBIAR_FONDO= 1;
+    private static final int QUITAR_BARRA_SISTEMA= 2;
+    private static final int BLOQUEAR_LLAMADAS= 3;
+    private static final int CAMBIAR_PASS= 4;
+    private static final int RESETEAR_ENTORNO= 5;
+    private static final int AYUDA=6;
+    private static final int SALIR=7;
 
     private ClickListener clickListener;
     private LayoutInflater inflater;
@@ -83,28 +84,31 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
 
             Intent intent;
             switch(getAdapterPosition()){
-                case MIS_ENTRADAS:
+                case CAMBIAR_VERSION:
 
                     clickListener.itemClicked(v, getAdapterPosition());
 
                     break;
-                case CIUDADES:
-
+                case CAMBIAR_FONDO:
+                    clickListener.itemClicked(v, getAdapterPosition());
                     break;
-                case INTERESES:
-
+                case QUITAR_BARRA_SISTEMA:
+                    clickListener.itemClicked(v, getAdapterPosition());
                     break;
-                case TU_CUENTA:
-
+                case BLOQUEAR_LLAMADAS:
+                    clickListener.itemClicked(v, getAdapterPosition());
+                    break;
+                case CAMBIAR_PASS:
+                    clickListener.itemClicked(v, getAdapterPosition());
+                    break;
+                case RESETEAR_ENTORNO:
+                    clickListener.itemClicked(v, getAdapterPosition());
                     break;
                 case AYUDA:
-
-                    break;
-                case CONTACTO:
-
+                    clickListener.itemClicked(v, getAdapterPosition());
                     break;
                 case SALIR:
-
+                    clickListener.itemClicked(v, getAdapterPosition());
                     break;
 
             }
