@@ -2,17 +2,9 @@ package es.uoproject.pliskid.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.PendingIntent;
-import android.appwidget.AppWidgetHost;
-import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,37 +14,20 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.service.notification.StatusBarNotification;
-import android.support.annotation.DimenRes;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsoluteLayout;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -79,7 +54,6 @@ import es.uoproject.pliskid.modelo.Pack;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -114,7 +88,7 @@ public class Launcher extends AppCompatActivity {
     LauncherAppWidgetHost mAppWidgetHost;
     //To get access to our activity info (SAVING CHANGES IN ACTIVITY)
     static Activity activity;
-    boolean version=false;
+    boolean versionMaestra =false;
 
     private ProgressBar bar;
 
@@ -253,18 +227,18 @@ public class Launcher extends AppCompatActivity {
     @Override
     public void onNewIntent(Intent newIntent) {
 
-        version = newIntent.getBooleanExtra("Version", false);
-        if(version)
+        versionMaestra = newIntent.getBooleanExtra("Version", false);
+        if(versionMaestra)
             cambiarVersion();
         else{
-            version=false;
+            versionMaestra =false;
             botonCambiarFondo.setVisibility(View.VISIBLE);
         }
     }
 
     private void cambiarVersion() {
 
-        if(version) {
+        if(versionMaestra) {
 
             grid.setVisibility(View.INVISIBLE);
             drawer.setVisibility(View.INVISIBLE);
@@ -277,7 +251,7 @@ public class Launcher extends AppCompatActivity {
                 v.setOnLongClickListener(null);
             }
 
-            version = false;
+            versionMaestra = false;
         }else{
             grid.setVisibility(View.VISIBLE);
             drawer.setVisibility(View.VISIBLE);
@@ -286,11 +260,63 @@ public class Launcher extends AppCompatActivity {
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             for (int i = 0; i < home.getChildCount(); i++) {
-                View v = home.getChildAt(i);
-                v.setOnLongClickListener(null);
+                final View v = home.getChildAt(i);
+                v.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        v.setOnTouchListener(new MyOnTouchListener());
+
+                        final Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if (v.isPressed()) {
+                                    Activity activity = (Activity) Launcher.this;
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            home.removeView(v);
+
+                                        }
+                                    });
+                                } else {
+
+                                    this.cancel();
+                                }
+                            }
+                        }, 5000, 6000);
+
+                        home.addView(bar);
+
+                        final CountDownTimer cdt = new CountDownTimer(5000, 200) {
+
+                            public void onTick(long millisUntilFinished) {
+
+                                if (v.isPressed()) {
+                                    int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
+                                    bar.setProgress(current);
+                                } else {
+                                    onFinish();
+                                    this.cancel();
+                                }
+                            }
+
+                            public void onFinish() {
+                                home.removeView(bar);
+                            }
+                        }.start();
+
+
+                        if (!v.isPressed()) {
+                            timer.cancel();
+                            cdt.onFinish();
+                        }
+                        return true;
+                    }
+                });
             }
 
-            version = false;
+            versionMaestra = true;
         }
     }
 
