@@ -40,10 +40,11 @@
 
         <ImageView
             android:id="@+id/handle"
-            android:background="@drawable/abc_ic_menu_selectall_mtrl_alpha"
+            android:src="@drawable/abc_ic_menu_selectall_mtrl_alpha"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/azul_componente"/>
+
         <GridView
             android:id="@+id/content"
             android:background="@color/black_transparent"

@@ -2,61 +2,32 @@ package es.uoproject.pliskid.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.appwidget.AppWidgetHost;
-import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.service.notification.StatusBarNotification;
-import android.support.annotation.DimenRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsoluteLayout;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -84,7 +55,6 @@ import es.uoproject.pliskid.modelo.Pack;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -97,6 +67,7 @@ public class Launcher extends AppCompatActivity {
     private static final int REQUEST_PICK_SHORTCUT = 2;
     private static final int REQUEST_CREATE_SHORTCUT = 3;
     private static final int CHANGE_PICTURE=10;
+    private static final int TYPE_PASSWORD = 4;
     //Grid with all the apps
     GridView grid;
     //Main screen/ user desktop
@@ -121,7 +92,8 @@ public class Launcher extends AppCompatActivity {
     LauncherAppWidgetHost mAppWidgetHost;
     //To get access to our activity info (SAVING CHANGES IN ACTIVITY)
     static Activity activity;
-    boolean version=true;
+    static boolean versionMaestra;
+    //public boolean mDisplayBlocked = false;
 
     private ProgressBar bar;
 
@@ -138,6 +110,7 @@ public class Launcher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         launchAppChooser();
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -206,6 +179,14 @@ public class Launcher extends AppCompatActivity {
         fragment_drawer.setUp((DrawerLayout) findViewById(R.id.drawerlayout), null);
 
 
+        drawerLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return false;
+            }
+        });
+
+
         fondo_pantalla = (ImageView) findViewById(R.id.fondo_pantalla);
         String selectedImage = preferencias.getUserImage();
         if(selectedImage!=null) {
@@ -219,10 +200,12 @@ public class Launcher extends AppCompatActivity {
             public void onClick(View view) {
                 // Click action
                 Intent intent = new Intent(Launcher.this, Lock_Screen.class);
-                startActivity(intent);
-                cambiarVersion();
+                startActivityForResult(intent, TYPE_PASSWORD);
+
             }
         });
+
+        versionMaestra=true;
 
         startService(new Intent(getApplicationContext(), NotificationListener.class));
 
@@ -239,38 +222,167 @@ public class Launcher extends AppCompatActivity {
     @Override
     public void onNewIntent(Intent newIntent) {
 
-        version = newIntent.getBooleanExtra("Version", false);
-        if(version)
+        boolean version = newIntent.getBooleanExtra("Version", false);
+        if(version) {
+            versionMaestra=true;
             cambiarVersion();
-        else{
-            version=false;
         }
     }
 
     public void cambiarVersion() {
 
-        if(version) {
+        if(versionMaestra) {
             fab_salir.setVisibility(View.VISIBLE);
-            grid.setVisibility(View.INVISIBLE);
             drawer.setVisibility(View.INVISIBLE);
-            home.setOnLongClickListener(null);
+            //home.setOnLongClickListener(null);
+            home.setEnabled(false);
+            //mDisplayBlocked=true;
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
             for (int i = 0; i < home.getChildCount(); i++) {
                 View v = home.getChildAt(i);
+                if(v.getClass().getName().contains("LinearLayout"))
                 v.setOnLongClickListener(null);
             }
 
-            version = false;
+            versionMaestra = false;
+
         }else{
             fab_salir.setVisibility(View.INVISIBLE);
-            grid.setVisibility(View.VISIBLE);
             drawer.setVisibility(View.VISIBLE);
-            home.setOnLongClickListener(null);
+            home.setEnabled(true);
+           /* home.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Launcher.this);
+                    builder.setTitle("¿Qué quieres añadir?").setItems(R.array.send_array, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            switch (which) {
+                                case 0:
+                                    selectWidget();
+                                    break;
+                                case 1:
+                                    selectShortcut();
+                                    break;
+                            }
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+                    return true;
+                }
+            });*/
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-            version = true;
+            for (int i = 0; i < home.getChildCount(); i++) {
+                final View v = home.getChildAt(i);
+                if (v.getClass().getName().contains("LinearLayout"))
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            longpressed = true;
+                            v.setOnTouchListener(new View.OnTouchListener() {
+                                int leftMargin;
+                                int topMargin;
+
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    switch (event.getAction()) {
+                                        case MotionEvent.ACTION_MOVE:
+                                            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(v.getWidth(), v.getHeight());
+                                            //Here we get the event RAWx and y and adjust the result to put the icon in the center
+                                            leftMargin = (int) event.getRawX() - v.getWidth() / 2;
+                                            topMargin = (int) event.getRawY() - v.getHeight() / 2;
+                                            //Take care of margins
+                                            //Right side of screen
+                                            if (leftMargin + v.getWidth() > v.getRootView().getWidth())
+                                                leftMargin = v.getRootView().getWidth() - v.getWidth();
+                                            //Left side
+                                            if (leftMargin < 0)
+                                                leftMargin = 0;
+                                            //bottom of screen
+                                            if (topMargin + v.getHeight() > ((View) v.getParent()).getHeight())
+                                                topMargin = ((View) v.getParent()).getHeight() - v.getHeight();
+                                            //top of screen
+                                            if (topMargin < 0)
+                                                topMargin = 0;
+
+                                            layoutParams.leftMargin = leftMargin;
+                                            layoutParams.topMargin = topMargin;
+                                            //Set the view with the new layout parameters
+                                            v.setLayoutParams(layoutParams);
+
+                                            break;
+                                        case MotionEvent.ACTION_UP:
+                                            longpressed = false;
+                                            v.setOnTouchListener(null);
+
+                                            break;
+                                    }
+                                    //to continue handling the event after this event
+                                    return false;
+                                }
+                            });
+
+                            final Timer timerWidget = new Timer();
+                            timerWidget.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (longpressed) {
+                                        Activity activity = (Activity) Launcher.this;
+                                        activity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                home.removeView(v);
+                                            }
+                                        });
+                                    } else {
+
+                                        this.cancel();
+                                    }
+                                }
+                            }, 5000, 6000);
+
+                            home.addView(bar);
+
+                            final CountDownTimer cdtWidget = new CountDownTimer(5000, 200) {
+
+                                public void onTick(long millisUntilFinished) {
+
+                                    if (longpressed) {
+                                        int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
+                                        bar.setProgress(current);
+                                    } else {
+                                        onFinish();
+                                        this.cancel();
+                                    }
+                                }
+
+                                public void onFinish() {
+                                    home.removeView(bar);
+                                }
+                            }.start();
+
+
+                            if (!longpressed) {
+                                timerWidget.cancel();
+                                cdtWidget.onFinish();
+                            }
+
+                            return true;
+
+                        }
+                    });
+                }
+
+            versionMaestra = true;
+
         }
+
     }
 
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
@@ -318,6 +430,8 @@ public class Launcher extends AppCompatActivity {
                 configureShortcut(data);
             } else if (requestCode == REQUEST_CREATE_SHORTCUT) {
                 createShortcut(data);
+            }else if (requestCode == TYPE_PASSWORD){
+                cambiarVersion();
             } else if (requestCode == CHANGE_PICTURE) {
                     Uri selectedImage = data.getData();
                     preferencias.setUserImage(selectedImage);
@@ -729,5 +843,13 @@ public class Launcher extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
+/*
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent pEvent) {
+        if (!mDisplayBlocked) {
+            return super.dispatchTouchEvent(pEvent);
+        }
+        return mDisplayBlocked;
+    }
+*/
 }

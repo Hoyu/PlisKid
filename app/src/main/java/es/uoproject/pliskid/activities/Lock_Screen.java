@@ -46,7 +46,9 @@ public class Lock_Screen extends AppCompatActivity  {
                 String password= preferencias.getUserPass();
                 if(password!=null){
                     if(String.valueOf(mPasswordView.getText()).equals(password)){
-                        onBackPressed();
+                        Intent resultIntent = new Intent();
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
                     }else{
                         Toast.makeText(Lock_Screen.this, "Clave incorrecta", Toast.LENGTH_SHORT).show();
                     }
@@ -64,7 +66,5 @@ public class Lock_Screen extends AppCompatActivity  {
             }
         });
     }
-
-
 }
 
