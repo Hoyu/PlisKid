@@ -4,6 +4,7 @@ import android.content.Context;
 
 import es.uoproject.pliskid.activities.Launcher;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,4 +68,5 @@ public class Serialization {
         //If everything fails
         return null;
     }
+
 }

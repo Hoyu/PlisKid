@@ -17,4 +17,26 @@
         <item>Salir</item>
     </string-array>
 
+    <string-array name="preguntas">
+        <item>Cambiar Versión</item>
+        <item>Cambiar fondo de pantalla</item>
+        <item>Bloquear Barra Sistema</item>
+        <item>Bloquear Llamadas</item>
+        <item>Cambiar Contraseña</item>
+        <item>Resetear entorno</item>
+        <item>Ayuda</item>
+        <item>Salir</item>
+    </string-array>
+
+    <string-array name="respuestas">
+        <item>Cambiar Versión</item>
+        <item>Cambiar fondo de pantalla</item>
+        <item>Bloquear Barra Sistema</item>
+        <item>Bloquear Llamadas</item>
+        <item>Cambiar Contraseña</item>
+        <item>Resetear entorno</item>
+        <item>Ayuda</item>
+        <item>Salir</item>
+    </string-array>
+
 </resources>

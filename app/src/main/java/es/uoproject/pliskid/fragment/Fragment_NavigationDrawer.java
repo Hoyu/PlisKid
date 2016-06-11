@@ -20,13 +20,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.uoproject.pliskid.R;
+import es.uoproject.pliskid.activities.Ayuda;
 import es.uoproject.pliskid.activities.Launcher;
 import es.uoproject.pliskid.adapters.NavigationAdapter;
+import es.uoproject.pliskid.util.Serialization;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -150,9 +153,25 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
                 activity.cambiarVersion();
                 break;
 
-            case SALIR:
+            case CAMBIAR_PASS:
+                activity.cambiarPassword();
+                break;
 
-                activity.launchAppChooser();
+            case RESETEAR_ENTORNO:
+                activity.reset();
+                break;
+            case AYUDA:
+                Intent intent= new Intent(activity, Ayuda.class);
+                startActivity(intent);
+                break;
+            case BLOQUEAR_LLAMADAS:
+                activity.bloqueoLlamadas();
+                break;
+            case QUITAR_BARRA_SISTEMA:
+                activity.bloqueoBarraSistema();
+                break;
+            case SALIR:
+                activity.cambiarLauncherInicio();
                 break;
         }
     }

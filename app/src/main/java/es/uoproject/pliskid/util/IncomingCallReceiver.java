@@ -18,21 +18,25 @@ public class IncomingCallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        try {
-            TelephonyManager tm = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
+        Preferencias preferencias= new Preferencias(context);
+        if(preferencias.getLockIncomingCallsKey()) {
 
-            Method m1 = tm.getClass().getDeclaredMethod("getITelephony");
-            m1.setAccessible(true);
-            Object iTelephony = m1.invoke(tm);
+            try {
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
 
-            Method m2 = iTelephony.getClass().getDeclaredMethod("silenceRinger");
-            Method m3 = iTelephony.getClass().getDeclaredMethod("endCall");
+                Method m1 = tm.getClass().getDeclaredMethod("getITelephony");
+                m1.setAccessible(true);
+                Object iTelephony = m1.invoke(tm);
 
-            m2.invoke(iTelephony);
-            m3.invoke(iTelephony);
+                Method m2 = iTelephony.getClass().getDeclaredMethod("silenceRinger");
+                Method m3 = iTelephony.getClass().getDeclaredMethod("endCall");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                m2.invoke(iTelephony);
+                m3.invoke(iTelephony);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

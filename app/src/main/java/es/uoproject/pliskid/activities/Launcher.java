@@ -20,6 +20,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -52,12 +53,14 @@ import es.uoproject.pliskid.util.Serialization;
 import es.uoproject.pliskid.adapters.DrawerAdapter;
 import es.uoproject.pliskid.modelo.Pack;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.locks.Lock;
 
 
 public class Launcher extends AppCompatActivity {
@@ -68,6 +71,7 @@ public class Launcher extends AppCompatActivity {
     private static final int REQUEST_CREATE_SHORTCUT = 3;
     private static final int CHANGE_PICTURE=10;
     private static final int TYPE_PASSWORD = 4;
+    private static final int CAMBIAR_PASSWORD = 5;
     //Grid with all the apps
     GridView grid;
     //Main screen/ user desktop
@@ -227,6 +231,12 @@ public class Launcher extends AppCompatActivity {
             versionMaestra=true;
             cambiarVersion();
         }
+    }
+
+    public void cambiarPassword(){
+        preferencias.removeKey("password");
+        Intent intent= new Intent(Launcher.this, Lock_Screen.class);
+        startActivityForResult(intent, CAMBIAR_PASSWORD);
     }
 
     public void cambiarVersion() {
@@ -430,8 +440,10 @@ public class Launcher extends AppCompatActivity {
                 configureShortcut(data);
             } else if (requestCode == REQUEST_CREATE_SHORTCUT) {
                 createShortcut(data);
-            }else if (requestCode == TYPE_PASSWORD){
+            }else if (requestCode == TYPE_PASSWORD) {
                 cambiarVersion();
+            }else if (requestCode == CAMBIAR_PASSWORD){
+                //Action
             } else if (requestCode == CHANGE_PICTURE) {
                     Uri selectedImage = data.getData();
                     preferencias.setUserImage(selectedImage);
@@ -769,6 +781,21 @@ public class Launcher extends AppCompatActivity {
 
     }
 
+    public void bloqueoBarraSistema() {
+        preferencias.setLockStatusBarKey(!preferencias.getLockStatusBarKey());
+    }
+
+    public void bloqueoLlamadas() {
+        preferencias.setLockIncomingCallsKey(!preferencias.getLockIncomingCallsKey());
+
+    }
+
+    public void cambiarLauncherInicio() {
+
+        startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+
+    }
+
     public class AppListener extends BroadcastReceiver {
 
         @Override
@@ -830,7 +857,7 @@ public class Launcher extends AppCompatActivity {
     {
         try
         {
-            if(!hasFocus)
+            if(!hasFocus && preferencias.getLockStatusBarKey())
             {
                 Object service  = getSystemService("statusbar");
                 Class<?> statusbarManager = Class.forName("android.app.StatusBarManager");
@@ -852,4 +879,15 @@ public class Launcher extends AppCompatActivity {
         return mDisplayBlocked;
     }
 */
+
+    public void reset(){
+
+        File data= new File(getApplicationContext().getFilesDir(), "data");
+        data.delete();
+        preferencias.clearPrefs();
+        Intent intent=new Intent(Launcher.this, Splash.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
