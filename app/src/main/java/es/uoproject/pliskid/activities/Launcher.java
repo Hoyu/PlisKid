@@ -126,7 +126,7 @@ public class Launcher extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        launchAppChooser();
+        //launchAppChooser();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -245,7 +245,7 @@ public class Launcher extends AppCompatActivity {
         startService(new Intent(getApplicationContext(), NotificationListener.class));
 
         //Pregunta para poner como default
-        launchAppChooser();
+        //launchAppChooser();
         //cambiarLauncherInicio();
 
         /*//Adding widgets
