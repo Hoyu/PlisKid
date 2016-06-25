@@ -33,18 +33,18 @@
     </string-array>
 
     <string-array name="respuestas">
-        <item>Cambiar Versión</item>
-        <item>Cambiar fondo de pantalla</item>
-        <item>Bloquear Barra Sistema</item>
-        <item>Bloquear Llamadas</item>
-        <item>Cambiar Contraseña</item>
-        <item>Resetear entorno</item>
-        <item>Ayuda</item>
-        <item>Salir</item>
-        <item>Cambiar Contraseña</item>
-        <item>Resetear entorno</item>
-        <item>Ayuda</item>
-        <item>Salir</item>
+        <item>El menú se encuentra a la izquierda y si tiras del icono de abajo encontrarás todas las aplicaciones que tienes en tu dispositivo.</item>
+        <item>Por defecto Pliskid cortará las llamadas entrantes y bloqueará la barra del sistema para evitar que se puedan mirar las notificaciones del sistema.</item>
+        <item>Para agregar una aplicación solo tendrás que pantener pulsado sobre una de ellas y si lo que quieres es un Widget o un Shortcut, mantén pulsado sobre el fondo del entorno y te mostraremos lo que puedes añadir.</item>
+        <item>Para mover un elemento del entorno sólo tienes que mantener pulsado y después arrastrar, ¡pero antes de que se rellene la barra que aparecerá arriba!</item>
+        <item>Para eliminar mantén pulsado sobre el elemento y espera a que la barra se rellene arriba.</item>
+        <item>Tan sencillo como escribir otra clave en la pantalla de Clave maestra.</item>
+        <item>Elige hacer una foto o selecciona una que tengas en tu galería u otras aplicaciones de fotos.</item>
+        <item>Te permite pasar al modo niño o salir de él. Sólo tienes que introducir tu contraseña.</item>
+        <item>Cuando entres en Pliskid tienes que tener en cuenta que es un entorno cerrado o Launcher y tendrás que seleccionar Pliskid si quieres que no se pueda salir de él o tu launcher del sistema para el uso normal de tu smartphone.</item>
+        <item>La barra del sistema viene por defecto bloqueada, esto es que cuando quieras desplegarla ella se pliegará de nuevo.</item>
+        <item>Las llamadas están por defecto bloqueadas. Colgaremos las llamadas para que no influyan en la experiencia del niño.</item>
+        <item>En los nuevos smartphones si arrastras desde abajo de la pantalla podrán aparecer aplicaciones como Google Now y su navegador de internet. Para evitarlo cuando lo use el niño debes realizar este gesto y elegir la opción Pliskid <b>Siempre</b></item>
     </string-array>
 
 </resources>

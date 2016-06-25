@@ -234,11 +234,11 @@ public class Launcher extends AppCompatActivity {
                 avatar.setVisibility(View.INVISIBLE);
                 bocadillo.setVisibility(View.INVISIBLE);
                 texto_bocadillo.setVisibility(View.INVISIBLE);
+                cambiarLauncherInicio();
             }
         });
 
-        tutorial("El menú está a la izquierda y tirando del iconito de abajo encontrarás las aplicaciones que puedes añadir al entorno");
-
+        tutorial("Elige Pliskid para convertirlo en un entorno cerrado y que el niño no pueda salir.\n\nPulsa en bocadillo para continuar");
 
         versionMaestra=true;
 
@@ -437,7 +437,7 @@ public class Launcher extends AppCompatActivity {
             versionMaestra = true;
 
         }
-        cambiarLauncherInicio();
+
     }
 
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
