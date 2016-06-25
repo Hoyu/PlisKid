@@ -6,15 +6,13 @@
     android:padding="@dimen/widget_margin"
     android:id="@+id/widget">
 
-    <TextView
+    <ImageView
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        android:background="@mipmap/avatar"
-
-        />
+        android:src="@mipmap/avatar_menu"/>
 
 </LinearLayout>

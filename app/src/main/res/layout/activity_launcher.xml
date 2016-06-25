@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerlayout"
+    android:background="@color/azul_fondo"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
@@ -10,6 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.Launcher"
+    android:background="@color/azul_fondo"
     android:id="@+id/home">
 
     <ImageView
@@ -17,7 +19,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/fondo_launcher"/>
+        android:src="@mipmap/fondo_2"/>
+
+    <ImageView
+        android:id="@+id/bocadillo"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="260dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/bocadillo"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/texto_bocadillo"
+        android:layout_marginBottom="300dp"
+        android:layout_width="280dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:keepScreenOn="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:enabled="true"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="30dp"
+        android:background="@mipmap/avatar"
+        android:visibility="invisible"/>
 
     <android.support.design.widget.FloatingActionButton
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -60,6 +99,16 @@
 
         </GridView>
     </SlidingDrawer>
+
+    <ImageView
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/progressbar"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
 

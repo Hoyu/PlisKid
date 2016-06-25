@@ -3,17 +3,32 @@
     android:orientation="vertical"
     android:id="@+id/option_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="50dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/icono_menu"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/ico_ayuda"/>
 
     <TextView
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/option_menu"
         android:text="option"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:textColor="@android:color/black"/>
+        android:textSize="15sp"
+        android:textColor="@android:color/white"/>
+
+    </LinearLayout>
 
     <View style="@style/Divider" />
 

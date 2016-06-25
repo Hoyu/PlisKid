@@ -2,20 +2,19 @@
     <string name="app_name">PlisKid</string>
 
     <string name="dummy_button">Crear Entorno</string>
-    <string name="dummy_content">Bienvenido a Pliskid\nPulsa sobre la pantalla para Crear tu primer entorno</string>
+    <string name="dummy_content">¡Bienvenido a Pliskid!\nPulsa sobre el bocadillo para crear tu primer entorno</string>
     <string name="title_activity_lock__screen">Clave Maestra</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Clave Maestra</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="action_sign_in">Registrar seña</string>
+    <string name="action_sign_in_short">Aceptar</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="error_invalid_password">Contraseña demasiado corta</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_field_required">Necesita información</string>
+    <string name="permission_rationale">"Se necesita permiso para autocompletado."
     </string>
 
     <string name="hello_world">Hello world!</string>
@@ -29,7 +28,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="creditos">Proyecto fin de carrera\nPromovido por: Universidad de Oviedo\nDiseñador y desarrollador: Jose Julio Cueto Lozano\nContacto: josejcueto@gmail.com\nDirectora de proyecto: B. Cristina Pelayo García-Bustelo</string>
+    <string name="creditos"><b>PlisKid</b>\nProyecto fin de carrera promovido por:\nUniversidad de Oviedo\n\nDiseñador y desarrollador:\nJose Julio Cueto Lozano\nContacto:\njosejcueto@gmail.com\n\nDirectora de proyecto:\nB. Cristina Pelayo García-Bustelo</string>
 
 
 </resources>

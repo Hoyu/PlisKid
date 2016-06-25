@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     private ClickListener clickListener;
     private LayoutInflater inflater;
     private String [] options;
+    private int [] imagenes;
     private Context context;
 
     public NavigationAdapter(Context context){
@@ -38,6 +40,10 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
         inflater=LayoutInflater.from(context);
         Resources res=context.getResources();
         options=res.getStringArray(R.array.options);
+        imagenes=new int[]{R.mipmap.ico_cambiar_roll, R.mipmap.ico_fondo_pantalla,
+                R.mipmap.ico_bloqueo_barra_nav, R.mipmap.ico_bloqueo_llamadas,
+                R.mipmap.ico_cambiar_contrase, R.mipmap.ico_reset_entorno,
+                R.mipmap.ico_ayuda, R.mipmap.avatar};
     }
 
     @Override
@@ -54,6 +60,7 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     public void onBindViewHolder(NavigationAdapter.MyViewHolder holder, int position) {
 
         holder.drawer_option.setText(options[position]);
+        holder.drawer_icon.setImageResource(imagenes[position]);
 
     }
 
@@ -65,12 +72,14 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView drawer_option;
+        ImageView drawer_icon;
         LinearLayout option_layout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             drawer_option=(TextView) itemView.findViewById(R.id.option_menu);
+            drawer_icon=(ImageView) itemView.findViewById(R.id.icono_menu);
             option_layout=(LinearLayout) itemView.findViewById(R.id.option_layout);
             option_layout.setOnClickListener(this);
         }

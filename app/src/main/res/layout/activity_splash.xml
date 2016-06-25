@@ -2,29 +2,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="@mipmap/fondo_2"
     tools:context=".activities.Splash">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="260dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@mipmap/bocadillo"
+        />
+
     <TextView
+        android:layout_marginBottom="300dp"
         android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_width="280dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center_horizontal|bottom"
         android:keepScreenOn="true"
         android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="30sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="26sp"
         android:textStyle="bold"
+        android:textAlignment="center"
         android:enabled="true"/>
 
     <ImageView
-        android:layout_width="151dp"
-        android:layout_height="195dp"
-        android:layout_gravity="center_horizontal"
-android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="30dp"
         android:background="@mipmap/avatar"/>
 
     <!-- This FrameLayout insets its children based on system windows using

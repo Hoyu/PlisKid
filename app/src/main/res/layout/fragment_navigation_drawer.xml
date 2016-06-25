@@ -3,43 +3,50 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginRight="50dp"
+    android:layout_marginRight="40dp"
+    android:background="@color/azul_fondo"
     tools:context="es.uoproject.pliskid.fragment.Fragment_NavigationDrawer">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/azul_componente" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/avatar"/>
-
-
-        </LinearLayout>
-
-    </RelativeLayout>
-    <View style="@style/Divider" />
 
     <android.support.v7.widget.RecyclerView
         android:paddingTop="10dp"
         android:id="@+id/drawer_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/azul_componente">
+        android:background="@color/azul_fondo">
 
     </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul_fondo">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/azul_fondo" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@color/azul_fondo">
+
+            <ImageView
+                android:layout_gravity="left|bottom"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/avatar_menu"
+                android:background="@color/azul_fondo"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
 
 
 </LinearLayout>

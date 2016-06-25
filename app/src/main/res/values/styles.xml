@@ -33,7 +33,16 @@
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="TextInputLayoutLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
     </style>
 
 </resources>

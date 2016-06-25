@@ -255,18 +255,20 @@ public class Pack implements Serializable{
 
 
 
-                final ProgressBar bar= new ProgressBar(context,
+                /*final ProgressBar bar= new ProgressBar(context,
                         null,
                         android.R.attr.progressBarStyleHorizontal);
-                home.addView(bar, layoutParams);
+                home.addView(bar, layoutParams);*/
+                final Launcher activity=(Launcher)context;
+                activity.setProgressbar(0);
 
                 final CountDownTimer cdt = new CountDownTimer(5000, 200) {
 
                     public void onTick(long millisUntilFinished) {
 
                         if(v.isPressed()) {
-                            int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
-                            bar.setProgress(current);
+                            int current = (5 - (int)(millisUntilFinished / 1000.0f));
+                            activity.setProgressbar(current);
                         }else {
                             onFinish();
                             this.cancel();
@@ -274,7 +276,7 @@ public class Pack implements Serializable{
                     }
 
                     public void onFinish() {
-                        home.removeView(bar);
+                        activity.removeProgressbar();
                     }
                 }.start();
 

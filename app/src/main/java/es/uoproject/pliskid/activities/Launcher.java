@@ -84,6 +84,9 @@ public class Launcher extends AppCompatActivity {
     FloatingActionButton fab_salir;
 
     ImageView fondo_pantalla;
+    ImageView bocadillo;
+    ImageView avatar;
+    TextView texto_bocadillo;
 
     Preferencias preferencias;
 
@@ -99,7 +102,17 @@ public class Launcher extends AppCompatActivity {
     static boolean versionMaestra;
     //public boolean mDisplayBlocked = false;
 
-    private ProgressBar bar;
+    public void removeProgressbar() {
+        progressbar.setVisibility(View.INVISIBLE);
+    }
+
+    public void setProgressbar(int tramo) {
+        progressbar.setVisibility(View.VISIBLE);
+        this.progressbar.setImageResource(imagenes[tramo]);
+    }
+
+    public ImageView progressbar;
+    private int imagenes[];
 
     private Fragment_NavigationDrawer fragment_drawer;
     private DrawerLayout drawerLayout;
@@ -122,9 +135,12 @@ public class Launcher extends AppCompatActivity {
 
         preferencias=new Preferencias(this);
 
-        bar= new ProgressBar(Launcher.this,
-                null,
-                android.R.attr.progressBarStyleHorizontal);
+        progressbar= (ImageView)findViewById(R.id.progressbar);
+        imagenes=new int[]{R.mipmap.progressbar, R.mipmap.tramo1
+                , R.mipmap.tramo2
+                , R.mipmap.tramo3
+                , R.mipmap.tramo4
+                , R.mipmap.tramo5};
 
         mAppWidgetManager = AppWidgetManager.getInstance(this);
         mAppWidgetHost = new LauncherAppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
@@ -182,7 +198,7 @@ public class Launcher extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.fragment_drawer);
         fragment_drawer.setUp((DrawerLayout) findViewById(R.id.drawerlayout), null);
 
-
+        drawerLayout.setBackgroundResource(R.color.azul_fondo);
         drawerLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -209,18 +225,44 @@ public class Launcher extends AppCompatActivity {
             }
         });
 
+        bocadillo= (ImageView) findViewById(R.id.bocadillo);
+        avatar= (ImageView) findViewById(R.id.avatar);
+        texto_bocadillo= (TextView) findViewById(R.id.texto_bocadillo);
+        texto_bocadillo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avatar.setVisibility(View.INVISIBLE);
+                bocadillo.setVisibility(View.INVISIBLE);
+                texto_bocadillo.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        tutorial("El menú está a la izquierda y tirando del iconito de abajo encontrarás las aplicaciones que puedes añadir al entorno");
+
+
         versionMaestra=true;
 
         startService(new Intent(getApplicationContext(), NotificationListener.class));
 
         //Pregunta para poner como default
-        //launchAppChooser();
+        launchAppChooser();
+        //cambiarLauncherInicio();
 
         /*//Adding widgets
         //As for apps, we need a manager to get the widgets info
         widgetManager = AppWidgetManager.getInstance(this);
         //We create the id.xml in values for creating a resource item of type id
         widgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);*/
+    }
+
+    private void tutorial(String s) {
+
+        avatar.setVisibility(View.VISIBLE);
+        bocadillo.setVisibility(View.VISIBLE);
+        texto_bocadillo.setText(s);
+        texto_bocadillo.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override
@@ -357,15 +399,17 @@ public class Launcher extends AppCompatActivity {
                                 }
                             }, 5000, 6000);
 
-                            home.addView(bar);
+                            progressbar.setImageResource(imagenes[0]);
+                            progressbar.setVisibility(View.VISIBLE);
+                            //home.addView(progressbar);
 
                             final CountDownTimer cdtWidget = new CountDownTimer(5000, 200) {
 
                                 public void onTick(long millisUntilFinished) {
 
                                     if (longpressed) {
-                                        int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
-                                        bar.setProgress(current);
+                                        int current = (5 - (int)(millisUntilFinished / 1000.0f));
+                                        progressbar.setImageResource(imagenes[current]);
                                     } else {
                                         onFinish();
                                         this.cancel();
@@ -373,7 +417,8 @@ public class Launcher extends AppCompatActivity {
                                 }
 
                                 public void onFinish() {
-                                    home.removeView(bar);
+                                    progressbar.setVisibility(View.INVISIBLE);
+                                    //home.removeView(progressbar);
                                 }
                             }.start();
 
@@ -392,7 +437,7 @@ public class Launcher extends AppCompatActivity {
             versionMaestra = true;
 
         }
-
+        cambiarLauncherInicio();
     }
 
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
@@ -444,6 +489,7 @@ public class Launcher extends AppCompatActivity {
                 cambiarVersion();
             }else if (requestCode == CAMBIAR_PASSWORD){
                 //Action
+                Toast.makeText(Launcher.this,"Password cambiada", Toast.LENGTH_LONG).show();
             } else if (requestCode == CHANGE_PICTURE) {
                     Uri selectedImage = data.getData();
                     preferencias.setUserImage(selectedImage);
@@ -561,15 +607,17 @@ public class Launcher extends AppCompatActivity {
                         }
                     }, 5000, 6000);
 
-                    home.addView(bar);
+                    progressbar.setImageResource(imagenes[0]);
+                    progressbar.setVisibility(View.VISIBLE);
+                    //home.addView(progressbar);
 
-                    final CountDownTimer cdt = new CountDownTimer(5000, 200) {
+                    final CountDownTimer cdtWidget = new CountDownTimer(5000, 200) {
 
                         public void onTick(long millisUntilFinished) {
 
-                            if (v.isPressed()) {
-                                int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
-                                bar.setProgress(current);
+                            if (longpressed) {
+                                int current = (5 - (int)(millisUntilFinished / 1000.0f));
+                                progressbar.setImageResource(imagenes[current]);
                             } else {
                                 onFinish();
                                 this.cancel();
@@ -577,14 +625,15 @@ public class Launcher extends AppCompatActivity {
                         }
 
                         public void onFinish() {
-                            home.removeView(bar);
+                            progressbar.setVisibility(View.INVISIBLE);
+                            //home.removeView(progressbar);
                         }
                     }.start();
 
 
                     if (!v.isPressed()) {
                         timer.cancel();
-                        cdt.onFinish();
+                        cdtWidget.onFinish();
                     }
                     return true;
                 }
@@ -699,15 +748,17 @@ public class Launcher extends AppCompatActivity {
                     }
                 }, 5000, 6000);
 
-                home.addView(bar);
+                progressbar.setImageResource(imagenes[0]);
+                progressbar.setVisibility(View.VISIBLE);
+                //home.addView(progressbar);
 
                 final CountDownTimer cdtWidget = new CountDownTimer(5000, 200) {
 
                     public void onTick(long millisUntilFinished) {
 
                         if (longpressed) {
-                            int current = (int) (100 - (millisUntilFinished / 3000.0f) * 100.f);
-                            bar.setProgress(current);
+                            int current = (5 - (int)(millisUntilFinished / 1000.0f));
+                            progressbar.setImageResource(imagenes[current]);
                         } else {
                             onFinish();
                             this.cancel();
@@ -715,7 +766,8 @@ public class Launcher extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        home.removeView(bar);
+                        progressbar.setVisibility(View.INVISIBLE);
+                        //home.removeView(progressbar);
                     }
                 }.start();
 
@@ -783,11 +835,18 @@ public class Launcher extends AppCompatActivity {
 
     public void bloqueoBarraSistema() {
         preferencias.setLockStatusBarKey(!preferencias.getLockStatusBarKey());
+        if(preferencias.getLockStatusBarKey())
+            Toast.makeText(Launcher.this,"Barra del sistema bloqueada", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(Launcher.this,"Barra del sistema desbloqueada", Toast.LENGTH_LONG).show();
     }
 
     public void bloqueoLlamadas() {
         preferencias.setLockIncomingCallsKey(!preferencias.getLockIncomingCallsKey());
-
+        if(preferencias.getLockIncomingCallsKey())
+            Toast.makeText(Launcher.this,"Barra del sistema bloqueada", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(Launcher.this,"Barra del sistema desbloqueada", Toast.LENGTH_LONG).show();
     }
 
     public void cambiarLauncherInicio() {

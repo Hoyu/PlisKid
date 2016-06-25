@@ -1,6 +1,7 @@
 package es.uoproject.pliskid.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 
@@ -38,7 +39,8 @@ public class Lock_Screen extends AppCompatActivity  {
         mPasswordView = (EditText) findViewById(R.id.password);
 
 
-        FloatingActionButton botonClave = (FloatingActionButton) findViewById(R.id.botonClave);
+        Button botonClave = (Button) findViewById(R.id.botonClave);
+
         botonClave.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

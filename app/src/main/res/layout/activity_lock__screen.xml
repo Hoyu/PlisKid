@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="#0099cc"
+    android:background="@mipmap/fondo_1"
 
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -38,7 +38,8 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/TextLabel">
+                android:theme="@style/TextInputLayoutLabel"
+                app:hintTextAppearance="@style/TextInputLayoutLabel">
 
                 <EditText
                     android:id="@+id/password"
@@ -50,20 +51,18 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
+                    android:textColor="@color/azul_componente"
                     android:layout_margin="20dp"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.FloatingActionButton
+            <Button
                 android:id="@+id/botonClave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/icono_lock"
-                app:elevation="4dp"
-                android:layout_gravity="center"
-                app:backgroundTint="#33b5e5"
-            />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@mipmap/boton_clave"
+                android:layout_gravity="center"/>
 
 
         </LinearLayout>
