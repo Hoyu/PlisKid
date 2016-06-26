@@ -32,12 +32,7 @@ import es.uoproject.pliskid.adapters.NavigationAdapter;
 import es.uoproject.pliskid.util.Serialization;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Fragment_NavigationDrawer.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Fragment_NavigationDrawer#newInstance} factory method to
- * create an instance of this fragment.
+ * Clase Fragment que conforma el menú contextual y su funcionalidad
  */
 public class Fragment_NavigationDrawer extends Fragment implements NavigationAdapter.ClickListener {
 
@@ -74,7 +69,7 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
 
         return layout;
     }
-
+/*
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -86,7 +81,13 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
         }
         return list;
     }
+*/
 
+    /**
+     * Método que inicializa el menú contextual y su funcionalidad al abrir o cerrar
+     * @param drawerLayout
+     * @param toolbar
+     */
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerLayout=drawerLayout;
         drawerToggle=new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
@@ -112,6 +113,11 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
 
     }
 
+    /**
+     * Método que recoge la interfaz de pulsado del adapter del listado y ejecuta cada opción
+     * @param view
+     * @param position
+     */
     @Override
     public void itemClicked(View view, int position) {
 

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 /**
- * Created by darkm_000 on 13/05/2015.
+ * Clase que establece la funcionalidad al mover una aplicación dentro del entorno
  */
 public class MyOnTouchListener implements View.OnTouchListener {
 

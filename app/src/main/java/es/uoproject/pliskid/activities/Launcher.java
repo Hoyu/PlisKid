@@ -62,7 +62,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 
-
+/**
+ * Clase que se encarga de todo el comportamiento del launcher
+ */
 public class Launcher extends AppCompatActivity {
 
     private static final int REQUEST_PICK_APPWIDGET=20;
@@ -94,18 +96,29 @@ public class Launcher extends AppCompatActivity {
     Pack[] packs;
     PackageManager packageManager;
 
-
+    /**
+     * Variables que se encargan de manejar los widgets
+     */
     AppWidgetManager mAppWidgetManager;
     LauncherAppWidgetHost mAppWidgetHost;
+
     //To get access to our activity info (SAVING CHANGES IN ACTIVITY)
     static Activity activity;
+
     static boolean versionMaestra;
     //public boolean mDisplayBlocked = false;
 
+    /**
+     * Método que se encarga de borrar la barra temporal de borrado
+     */
     public void removeProgressbar() {
         progressbar.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Método que se encarga de establecer la posición de la barra temporal de borrado
+     * @param tramo
+     */
     public void setProgressbar(int tramo) {
         progressbar.setVisibility(View.VISIBLE);
         this.progressbar.setImageResource(imagenes[tramo]);
@@ -255,6 +268,10 @@ public class Launcher extends AppCompatActivity {
         widgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);*/
     }
 
+    /**
+     * Método que muestra al avatar con una información pasada por parámetro
+     * @param s frase que aparecerá en el bocadillo del asistente
+     */
     private void tutorial(String s) {
 
         avatar.setVisibility(View.VISIBLE);
@@ -265,6 +282,11 @@ public class Launcher extends AppCompatActivity {
 
     }
 
+    /**
+     * Recoge el intent del widget de Pliskid para realizar el cambio de rol o versión.
+     *
+     * @param newIntent
+     */
     @Override
     public void onNewIntent(Intent newIntent) {
 
@@ -440,6 +462,13 @@ public class Launcher extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que añade la funcionalidad a las aplicaciones que rescatamos del sistema
+     * @param context
+     * @param list
+     * @param intent
+     * @return
+     */
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -452,13 +481,18 @@ public class Launcher extends AppCompatActivity {
         return list;
     }
 
-
+    /**
+     * Método que lanza un diálogo de selección de todos los atajos del sistema
+     */
     void selectShortcut() {
         Intent intent = new Intent(Intent.ACTION_PICK_ACTIVITY);
         intent.putExtra(Intent.EXTRA_INTENT, new Intent(Intent.ACTION_CREATE_SHORTCUT));
         startActivityForResult(intent, REQUEST_PICK_SHORTCUT);
     }
 
+    /**
+     * Método que lanza un diálogo con el listado de widgets del sistema
+     */
     void selectWidget() {
         int appWidgetId = this.mAppWidgetHost.allocateAppWidgetId();
         Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
@@ -467,6 +501,10 @@ public class Launcher extends AppCompatActivity {
         startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
     }
 
+    /**
+     * Método que toma la información del widget
+     * @param pickIntent
+     */
     void addEmptyData(Intent pickIntent) {
         ArrayList customInfo = new ArrayList();
         pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, customInfo);
@@ -505,6 +543,11 @@ public class Launcher extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que transforma a Bitmap las imágenes externas tomadas del sistema.
+     * @param selectedImage
+     * @return
+     */
     public Bitmap getBitmap(Uri selectedImage) {
         Bitmap actuallyUsableBitmap = null;
 
@@ -540,10 +583,18 @@ public class Launcher extends AppCompatActivity {
         return actuallyUsableBitmap;
     }
 
+    /**
+     * Método que recoge la información del atajo del sistema
+     * @param data
+     */
     private void configureShortcut(Intent data) {
         startActivityForResult(data, REQUEST_CREATE_SHORTCUT);
     }
 
+    /**
+     * Método que recoge el atajo y lo integra en la aplicación con su icono, nombre y funcionalidad.
+     * @param intent
+     */
     public void createShortcut(Intent intent) {
         Intent.ShortcutIconResource iconResource = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
         Bitmap icon = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
@@ -660,6 +711,10 @@ public class Launcher extends AppCompatActivity {
         
     }
 
+    /**
+     * Método que recoge la información del widget del sistema
+     * @param data
+     */
     private void configureWidget(Intent data) {
         Bundle extras = data.getExtras();
         int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
@@ -674,6 +729,10 @@ public class Launcher extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que forma un view con la funcionalidad y el aspecto del widget
+     * @param data
+     */
     public void createWidget(Intent data) {
         Bundle extras = data.getExtras();
         int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
@@ -785,6 +844,9 @@ public class Launcher extends AppCompatActivity {
         drawer.bringToFront();
     }
 
+    /**
+     * Método que lanza un diálogo dónde el usuario puede elegir qué launcher ejecutar.
+     */
     public void launchAppChooser() {
         //Log.d(TAG, "launchAppChooser()");
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -793,7 +855,9 @@ public class Launcher extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    /**
+     * Método que recoge las aplicaciónes guardadas de sesiones anteriores y las coloca en su posición dentro del entorno
+     */
     public void appsLoad() {
         SerializableData data = Serialization.loadSerializableData();
         if (data != null) {
@@ -804,7 +868,9 @@ public class Launcher extends AppCompatActivity {
         drawer.bringToFront();
     }
 
-
+    /**
+     * Método que recoge las aplicaciones del sistema y las introduce en el grid de selección
+     */
     public void setPacks() {
         final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         //We want to get the apps that could be launch
@@ -833,6 +899,9 @@ public class Launcher extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que establece si la barra del sistema se muestra o no y avisa al usuario
+     */
     public void bloqueoBarraSistema() {
         preferencias.setLockStatusBarKey(!preferencias.getLockStatusBarKey());
         if(preferencias.getLockStatusBarKey())
@@ -841,6 +910,9 @@ public class Launcher extends AppCompatActivity {
             Toast.makeText(Launcher.this,"Barra del sistema desbloqueada", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Método que establece si las llamadas entrantes se bloquean o no y avisa al usuario
+     */
     public void bloqueoLlamadas() {
         preferencias.setLockIncomingCallsKey(!preferencias.getLockIncomingCallsKey());
         if(preferencias.getLockIncomingCallsKey())
@@ -849,12 +921,18 @@ public class Launcher extends AppCompatActivity {
             Toast.makeText(Launcher.this,"Barra del sistema desbloqueada", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Método que lanza la pantalla de ajustes que selecciona el launcher predeterminado del sistema
+     */
     public void cambiarLauncherInicio() {
 
         startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
 
     }
 
+    /**
+     * Clase que establece un Broadcast de escucha para instalaciones de aplicaciones nuevas
+     */
     public class AppListener extends BroadcastReceiver {
 
         @Override
@@ -872,10 +950,9 @@ public class Launcher extends AppCompatActivity {
     }
 
 
-
-
-
-
+    /**
+     * AsyncTask que recogerá las aplicaciones del sistema en el listado
+     */
     public class LoadApps extends AsyncTask<String, Void, String> {
 
         @Override
@@ -911,7 +988,10 @@ public class Launcher extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Método que bloquea la barra del sistema
+     * @param hasFocus
+     */
     public void onWindowFocusChanged(boolean hasFocus)
     {
         try
@@ -939,6 +1019,9 @@ public class Launcher extends AppCompatActivity {
     }
 */
 
+    /**
+     * Método que elimina los ficheros de persistencia y vuelve a iniciar la aplicación
+     */
     public void reset(){
 
         File data= new File(getApplicationContext().getFilesDir(), "data");

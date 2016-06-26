@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 
 /**
- * Created by favila on 14/5/16.
+ * Clase que gestiona el almacenamiento en SharedPreferences
  */
 public class Preferencias {
 
@@ -26,10 +26,17 @@ public class Preferencias {
         mContext = context;
     }
 
+    /**
+     * Método que establece el fichero y su privacidad
+     * @return
+     */
     private SharedPreferences getSettings(){
         return mContext.getSharedPreferences(SHARED_PREFS_FILE, 0);
     }
 
+    /**
+     * Método que borra las SharedPreferences
+     */
     public void clearPrefs(){
         SharedPreferences.Editor editor = getSettings().edit();
         editor.clear();

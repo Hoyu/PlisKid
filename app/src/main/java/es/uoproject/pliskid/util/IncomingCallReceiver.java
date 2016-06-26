@@ -11,7 +11,7 @@ import android.util.Log;
 import java.lang.reflect.Method;
 
 /**
- * Created by favila on 8/6/16.
+ * Servicio que recibe las llamadas entrantes y las bloquea
  */
 public class IncomingCallReceiver extends BroadcastReceiver {
 

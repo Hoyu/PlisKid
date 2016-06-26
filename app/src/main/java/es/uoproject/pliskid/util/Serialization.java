@@ -13,10 +13,14 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 
 /**
- * Created by darkm_000 on 10/06/2015.
+ * Clase que gestiona el fichero de persistencia.
  */
 public class Serialization {
 
+    /**
+     * Método que registra los cambios
+     * @param serializableData
+     */
     public static void serializeData(SerializableData serializableData){
 
         FileOutputStream fos;
@@ -34,6 +38,10 @@ public class Serialization {
         }
     }
 
+    /**
+     * Método que lee la configuración guardada
+     * @return
+     */
     public static SerializableData loadSerializableData(){
 
         ObjectInputStream objectInputStream=null;

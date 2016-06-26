@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import es.uoproject.pliskid.R;
 
+/**
+ * En esta clase se muestran los créditos del proyecto y una lista de faqs que puedan guiar al usuario en la experiencia.
+ */
 public class Ayuda extends AppCompatActivity {
 
     private ArrayList<FAQ> faqs = new ArrayList<>();
@@ -22,6 +25,10 @@ public class Ayuda extends AppCompatActivity {
     private String[] preguntas;
     private String[] respuestas;
 
+    /**
+     * Método que genera la interfaz e inicializa las variables
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +48,9 @@ public class Ayuda extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-
+    /**
+     * Clase interna que conforma el modelo de una faq
+     */
     private class FAQ {
 
         public FAQ(String pregunta, String respuesta) {
@@ -69,14 +78,23 @@ public class Ayuda extends AppCompatActivity {
         private String respuesta;
     }
 
+    /**
+     * Clase interna que establece el comportamiento del listado de faqs.
+     * <p>Extiende la funcionalidad del RecyclerView que consiste en un listado de carga dinámica que se va actualizando según lo que aparece en la pantalla del dispositivo.</p>
+     */
     public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.ViewHolder> {
 
         private ArrayList<FAQ> mDataset;
         private Context context;
 
+
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
+
+        /**
+         * Clase interna que establece el modelo de cada item dentro del adapter
+         */
         public class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             public TextView pregunta;
@@ -91,12 +109,25 @@ public class Ayuda extends AppCompatActivity {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
+
+        /**
+         * Constructor que recoge el contexto de la aplicación y los datos a mostrar.
+         * @param context
+         * @param myDataset
+         */
         public FAQAdapter(Context context,ArrayList<FAQ> myDataset) {
             this.context=context;
             mDataset = myDataset;
         }
 
         // Create new views (invoked by the layout manager)
+
+        /**
+         * Crea las nuevas views.
+         * @param parent
+         * @param viewType
+         * @return
+         */
         @Override
         public FAQAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
@@ -110,6 +141,12 @@ public class Ayuda extends AppCompatActivity {
         }
 
         // Replace the contents of a view (invoked by the layout manager)
+
+        /**
+         * Asigna los contenidos a cada view del adapter.
+         * @param holder
+         * @param position
+         */
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
@@ -120,6 +157,11 @@ public class Ayuda extends AppCompatActivity {
         }
 
         // Return the size of your dataset (invoked by the layout manager)
+
+        /**
+         * Establece el número de items del adapter
+         * @return
+         */
         @Override
         public int getItemCount() {
             return mDataset.size();

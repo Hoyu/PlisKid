@@ -11,10 +11,16 @@ import es.uoproject.pliskid.R;
 import es.uoproject.pliskid.activities.Launcher;
 
 /**
- * Implementation of App Widget functionality.
+ * Clase que implementa la funcionalidad del widget de la aplicación
  */
 public class Widget_Plis extends AppWidgetProvider {
 
+    /**
+     * Método que establece el view del widget
+     * @param context
+     * @param appWidgetManager
+     * @param appWidgetId
+     */
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
@@ -27,6 +33,12 @@ public class Widget_Plis extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    /**
+     * Método que establece el comportamiento al interactuar con el widget
+     * @param context
+     * @param appWidgetManager
+     * @param appWidgetIds
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them

@@ -13,8 +13,9 @@ import es.uoproject.pliskid.R;
 import es.uoproject.pliskid.util.Preferencias;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Pantalla Splash inicial de la aplicación en modo pantalla completa.
+ * <p>An example full-screen activity that shows and hides the system UI (i.e.
+ * status bar and navigation/system bar) with user interaction.</p>
  */
 public class Splash extends AppCompatActivity {
     Preferencias preferencias;
@@ -74,9 +75,10 @@ public class Splash extends AppCompatActivity {
         }
     };
     /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
+     * Listener que crea el primer entorno y comienza el flujo de la aplicación.
+     * <p>Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
+     * while interacting with activity UI.</p>
      */
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
@@ -161,7 +163,10 @@ public class Splash extends AppCompatActivity {
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
 
-    @SuppressLint("InlinedApi")
+    /**
+     * Método que muestra la barra del sistema y los elementos ocultos
+     */
+    //@SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

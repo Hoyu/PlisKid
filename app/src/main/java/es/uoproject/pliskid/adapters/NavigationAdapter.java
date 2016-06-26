@@ -15,7 +15,7 @@ import android.widget.TextView;
 import es.uoproject.pliskid.R;
 
 /**
- * Created by favila on 8/6/16.
+ * Clase que establece la configuración del listado del menú contextual
  */
 public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.MyViewHolder> {
 
@@ -46,6 +46,12 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
                 R.mipmap.ico_ayuda, R.mipmap.avatar};
     }
 
+    /**
+     * Método que crea el view por cada item
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public NavigationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -56,6 +62,11 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
         return myViewHolder;
     }
 
+    /**
+     * Método que le asigna los valores al item
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(NavigationAdapter.MyViewHolder holder, int position) {
 
@@ -64,11 +75,18 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
 
     }
 
+    /**
+     * Método con el número de objetos del listado
+     * @return
+     */
     @Override
     public int getItemCount() {
         return options.length;
     }
 
+    /**
+     * Clase que establece el modelo y funcionalidad del item
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView drawer_option;
@@ -124,10 +142,14 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
         }
     }
 
+
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
+    /**
+     * Interfaz que nos permitirá la comunicación con el fragment del menú contextual
+     */
     public interface ClickListener {
 
         public void itemClicked(View view, int position);

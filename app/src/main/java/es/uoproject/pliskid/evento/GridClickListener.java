@@ -11,7 +11,7 @@ import es.uoproject.pliskid.activities.Launcher;
 import es.uoproject.pliskid.modelo.Pack;
 
 /**
- * Created by darkm_000 on 11/05/2015.
+ * Clase que establece la funcionalidad al pulsar sobre una aplicación dentro del listado de aplicaciones
  */
 public class GridClickListener implements AdapterView.OnItemClickListener {
 

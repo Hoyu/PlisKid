@@ -13,7 +13,7 @@ import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 /**
- * Created by favila on 9/6/16.
+ * Servicio que recibe las notificaciones
  */
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)

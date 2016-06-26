@@ -19,7 +19,7 @@ import es.uoproject.pliskid.util.Preferencias;
 
 
 /**
- * A login screen that offers login via email/password.
+ * Pantalla de bloqueo y registro mediante una única clave
  */
 public class Lock_Screen extends AppCompatActivity  {
 
@@ -28,6 +28,11 @@ public class Lock_Screen extends AppCompatActivity  {
 
     private Preferencias preferencias;
 
+    /**
+     * Método que se encarga de inicializar la pantalla.
+     * Dentro del mismo estableceremos el comportamiento de los componentes
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

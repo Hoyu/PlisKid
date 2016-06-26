@@ -13,12 +13,16 @@ import es.uoproject.pliskid.modelo.Pack;
 import es.uoproject.pliskid.R;
 
 /**
- * Created by darkm_000 on 09/05/2015.
+ * Clase que dibuja el listado de aplicaciones del sistema
  */
 public class DrawerAdapter extends BaseAdapter {
 
     //Best performance for any View scrolling smooth
     //Class for drawing a multicomposed view object declared in the drawer_item.xml
+
+    /**
+     * Clase ViewHolder con el modelo del item del listado
+     */
     static class ViewHolder {
         TextView text;
         // TextView timestamp;
@@ -44,6 +48,10 @@ public class DrawerAdapter extends BaseAdapter {
         this.packs = packs;
     }
 
+    /**
+     * Método que devuelve el número de aplicaciones que se mostrará en el adapter
+     * @return
+     */
     @Override
     public int getCount() {
         return packs.length;
@@ -59,6 +67,13 @@ public class DrawerAdapter extends BaseAdapter {
         return 0;
     }
 
+    /**
+     * Método que crea un view por cada item y le asigna los valores
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         /*

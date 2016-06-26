@@ -44,7 +44,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by darkm_000 on 14/05/2015.
+ * Clase serializable que conforma el modelo de una aplicación y su funcionalidad.
+ *
  */
 public class Pack implements Serializable{
 
@@ -107,8 +108,9 @@ public class Pack implements Serializable{
         return name;
     }
 
-    //We use this methods to save the location of the icon in the app
-
+    /**
+     * Método que cachea la imagen
+     */
     public void cache(){
         if (iconPath==null){
             //Create directory for saving cached icons of the apps
@@ -141,6 +143,9 @@ public class Pack implements Serializable{
             new File(iconPath).delete();
     }
 
+    /**
+     * Método que recoge la imagen de caché
+     */
     public Bitmap getCached(){
 
         //We get a bitmap of the icon stored
@@ -163,6 +168,11 @@ public class Pack implements Serializable{
 
     }
 
+    /**
+     * Método que transforma un Drawable en Bitmap
+     * @param drawable
+     * @return
+     */
     public static Bitmap drawableToBitmap(Drawable drawable){
         if (drawable instanceof BitmapDrawable)
             return ((BitmapDrawable) drawable).getBitmap();
@@ -178,7 +188,11 @@ public class Pack implements Serializable{
         return bitmap;
     }
 
-
+    /**
+     * Método que ubica nuestro objeto aplicación en el entorno. Establece su funcionalidad y lo guarda en el archivo de persistencia
+     * @param context
+     * @param home
+     */
     public void addToHome(final Context context, final RelativeLayout home){
         final RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //the coordinates are float

@@ -9,7 +9,7 @@ import es.uoproject.pliskid.activities.Launcher;
 import es.uoproject.pliskid.modelo.Pack;
 
 /**
- * Created by darkm_000 on 13/05/2015.
+ * Clase que establece el comportamiento al pulsar sobre una aplicación
  */
 public class AppClickListener implements View.OnClickListener {
 

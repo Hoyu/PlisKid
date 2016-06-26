@@ -22,7 +22,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 
 /**
- * Created by darkm_000 on 11/05/2015.
+ * Clase que establece la funcionalidad al mantener pulsado sobre una aplicación dentro del listado de aplicaciones
  */
 public class GridLongClickListener implements AdapterView.OnItemLongClickListener {
 
