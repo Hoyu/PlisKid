@@ -20,6 +20,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +46,7 @@ import es.uoproject.pliskid.evento.GridLongClickListener;
 import es.uoproject.pliskid.evento.MyOnTouchListener;
 import es.uoproject.pliskid.evento.ShortcutClickListener;
 import es.uoproject.pliskid.fragment.Fragment_NavigationDrawer;
+import es.uoproject.pliskid.util.IncomingCallReceiver;
 import es.uoproject.pliskid.util.LauncherAppWidgetHost;
 import es.uoproject.pliskid.util.LauncherAppWidgetHostView;
 import es.uoproject.pliskid.util.NotificationListener;
@@ -95,6 +98,8 @@ public class Launcher extends AppCompatActivity {
     //With the packageManager we'll get the info of the system to our array of apps
     Pack[] packs;
     PackageManager packageManager;
+
+    boolean once=true;
 
     /**
      * Variables que se encargan de manejar los widgets
@@ -244,10 +249,36 @@ public class Launcher extends AppCompatActivity {
         texto_bocadillo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (once){
+                    once=false;
+                    cambiarLauncherInicio();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            if(versionMaestra)
+                                tutorial("Manten pulsada la pantalla para ver widgets y shortcuts");
+                            else
+                                tutorial("¡Hola compañero!\n¡Mira todo lo que tengo para ti!\n\nPulsa sobre el bocadillo para empezar");
+                        }
+                    }, 1000);
+
+                }
+
+                final AlphaAnimation alphaAnimation = new AlphaAnimation(1F, 0F);
+                alphaAnimation.setDuration(1000);
+                avatar.startAnimation(alphaAnimation);
+                avatar.invalidate();
+
+                bocadillo.startAnimation(alphaAnimation);
+                bocadillo.invalidate();
+
+                texto_bocadillo.startAnimation(alphaAnimation);
+                texto_bocadillo.invalidate();
+
                 avatar.setVisibility(View.INVISIBLE);
                 bocadillo.setVisibility(View.INVISIBLE);
                 texto_bocadillo.setVisibility(View.INVISIBLE);
-                cambiarLauncherInicio();
             }
         });
 
@@ -272,12 +303,27 @@ public class Launcher extends AppCompatActivity {
      * Método que muestra al avatar con una información pasada por parámetro
      * @param s frase que aparecerá en el bocadillo del asistente
      */
-    private void tutorial(String s) {
+    public void tutorial(String s) {
 
         avatar.setVisibility(View.VISIBLE);
         bocadillo.setVisibility(View.VISIBLE);
         texto_bocadillo.setText(s);
         texto_bocadillo.setVisibility(View.VISIBLE);
+        home.bringChildToFront(avatar);
+        home.bringChildToFront(bocadillo);
+        home.bringChildToFront(texto_bocadillo);
+
+        final AlphaAnimation alphaAnimation = new AlphaAnimation(0F, 1F);
+        alphaAnimation.setDuration(1000);
+        avatar.startAnimation(alphaAnimation);
+        avatar.invalidate();
+
+        bocadillo.startAnimation(alphaAnimation);
+        bocadillo.invalidate();
+
+        texto_bocadillo.startAnimation(alphaAnimation);
+        texto_bocadillo.invalidate();
+
 
 
     }
@@ -291,6 +337,18 @@ public class Launcher extends AppCompatActivity {
     public void onNewIntent(Intent newIntent) {
 
         boolean version = newIntent.getBooleanExtra("Version", false);
+        if(version) {
+            versionMaestra=true;
+            cambiarVersion();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent newIntent = getIntent();
+        boolean version = newIntent.getBooleanExtra("Version", false);
+        getIntent().removeExtra("Version");
         if(version) {
             versionMaestra=true;
             cambiarVersion();
@@ -702,13 +760,16 @@ public class Launcher extends AppCompatActivity {
         super.onStart();
 
         mAppWidgetHost.startListening();
+        getApplicationContext().startService(new Intent(getApplicationContext(),
+                NotificationListener.class));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mAppWidgetHost.stopListening();
-        
+        getApplicationContext().stopService(new Intent(getApplicationContext(),
+                NotificationListener.class));
     }
 
     /**
@@ -916,9 +977,9 @@ public class Launcher extends AppCompatActivity {
     public void bloqueoLlamadas() {
         preferencias.setLockIncomingCallsKey(!preferencias.getLockIncomingCallsKey());
         if(preferencias.getLockIncomingCallsKey())
-            Toast.makeText(Launcher.this,"Barra del sistema bloqueada", Toast.LENGTH_LONG).show();
+            Toast.makeText(Launcher.this,"Llamadas bloqueadas", Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(Launcher.this,"Barra del sistema desbloqueada", Toast.LENGTH_LONG).show();
+            Toast.makeText(Launcher.this,"Llamadas desbloqueadas", Toast.LENGTH_LONG).show();
     }
 
     /**

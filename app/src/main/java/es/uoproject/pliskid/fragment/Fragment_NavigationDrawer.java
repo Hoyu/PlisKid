@@ -29,6 +29,7 @@ import es.uoproject.pliskid.R;
 import es.uoproject.pliskid.activities.Ayuda;
 import es.uoproject.pliskid.activities.Launcher;
 import es.uoproject.pliskid.adapters.NavigationAdapter;
+import es.uoproject.pliskid.util.Preferencias;
 import es.uoproject.pliskid.util.Serialization;
 
 /**
@@ -69,7 +70,7 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
 
         return layout;
     }
-/*
+
     private List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -81,7 +82,7 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
         }
         return list;
     }
-*/
+
 
     /**
      * Método que inicializa el menú contextual y su funcionalidad al abrir o cerrar
@@ -178,6 +179,9 @@ public class Fragment_NavigationDrawer extends Fragment implements NavigationAda
                 break;
             case SALIR:
                 activity.cambiarLauncherInicio();
+                Preferencias preferencias=new Preferencias(activity);
+                preferencias.setLockIncomingCallsKey(false);
+                activity.finishAffinity();
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package es.uoproject.pliskid.evento;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class GridLongClickListener implements AdapterView.OnItemLongClickListene
     SlidingDrawer slidingDrawer;
     RelativeLayout home;
     Pack[] packs;
+    boolean once=true;
 
     public GridLongClickListener(Context context, SlidingDrawer slidingDrawer, RelativeLayout home, Pack[] packs) {
         this.context = context;
@@ -98,6 +100,12 @@ public class GridLongClickListener implements AdapterView.OnItemLongClickListene
         //Now we have to ensure that the new icon doesn't appear over the slidingDrawer
         slidingDrawer.bringToFront();
         //return true should stop onitemclicklistener
+
+        if(once) {
+            once=false;
+            Launcher launcher = (Launcher) context;
+            launcher.tutorial("Para mover o borrar manten pulsado el icono");
+        }
         return true;
     }
 }

@@ -79,9 +79,10 @@
 
         <ImageView
             android:id="@+id/handle"
-            android:src="@drawable/abc_ic_menu_selectall_mtrl_alpha"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:src="@mipmap/boton_deslizar_pantalla"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingBottom="5dp"
             android:backgroundTint="@color/azul_componente"/>
 
         <GridView

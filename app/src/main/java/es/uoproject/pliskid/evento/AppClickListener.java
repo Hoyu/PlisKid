@@ -15,10 +15,18 @@ public class AppClickListener implements View.OnClickListener {
 
     Context context;
 
+    /**
+     * Método constructor
+     * @param context
+     */
     public AppClickListener(Context context) {
         this.context = context;
     }
 
+    /**
+     * Listener que lanza la aplicación al pulsar.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         //We use .Tag() to obtain the info for the position in the array

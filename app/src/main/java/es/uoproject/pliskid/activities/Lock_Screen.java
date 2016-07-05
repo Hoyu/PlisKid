@@ -40,7 +40,10 @@ public class Lock_Screen extends AppCompatActivity  {
         setContentView(R.layout.activity_lock__screen);
 
         preferencias=new Preferencias(this);
+        String password= preferencias.getUserPass();
+        if(password==null) {
 
+        }
         mPasswordView = (EditText) findViewById(R.id.password);
 
 

@@ -68,7 +68,7 @@ public class Preferencias {
     }
 
     public boolean getLockStatusBarKey(){
-        return getSettings().getBoolean(LOCK_STATUS_BAR_KEY, true);
+        return getSettings().getBoolean(LOCK_STATUS_BAR_KEY, false);
     }
 
     public void setLockStatusBarKey(boolean lockStatusBarKey){
@@ -78,7 +78,7 @@ public class Preferencias {
     }
 
     public boolean getLockIncomingCallsKey(){
-        return getSettings().getBoolean(LOCK_INCOMING_CALLS_KEY, true);
+        return getSettings().getBoolean(LOCK_INCOMING_CALLS_KEY, false);
     }
 
     public void setLockIncomingCallsKey(boolean lockStatusBarKey){
